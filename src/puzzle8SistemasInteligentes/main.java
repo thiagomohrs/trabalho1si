@@ -1,5 +1,8 @@
 package puzzle8SistemasInteligentes;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 public class main {
@@ -40,14 +43,32 @@ public class main {
 							int distcol = colunaob - colunama;
 							int distlin = linhaob - linhama;
 							distvalor = Math.abs(distcol) + Math.abs(distlin);
-							System.out.println("valorob: " + valorob + " | distvalor: " + distvalor);
+							// imprime a distancia para cada peça(numero)
+							System.out.println("Peça nº: " + valorob + " | Distancia de posição objetivo: " + distvalor);
 						}
 						disttotal += distvalor;
 					}
 				}
 			}
 		}
+		// imprime somatorio de todas as distancias
 		System.out.println("disttotal: " + disttotal);
+	}
+
+	public static int[][] criarMatrizAleatoria(int[][] matriz) {
+		List<Integer> numeros = new ArrayList<>();
+		for (int i = 0; i < 9; i++) { // Sequencia da mega sena
+			numeros.add(i);
+		}
+		Collections.shuffle(numeros);
+		int index = 0;
+		for (int linha = 0; linha < 3; linha++) {
+			for (int coluna = 0; coluna < 3; coluna++) {
+				matriz[linha][coluna] = numeros.get(index) + 1;
+				index++;
+			}
+		}
+		return matriz;
 	}
 
 	public static void main(String[] args) {
@@ -59,7 +80,10 @@ public class main {
 		int matriz[][] = new int[3][3];
 
 		// pede para usuario criar matriz
-		criarMatriz(matriz);
+		// criarMatriz(matriz);
+
+		// cria matriz aleatória
+		criarMatrizAleatoria(matriz);
 
 		// imprime matriz criada
 		imprimir(matriz);
