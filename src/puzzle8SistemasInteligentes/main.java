@@ -31,13 +31,16 @@ public class main {
 
 	public static void calculaDistancia(int[][] matriz, int objetivo[][], List<Integer> distancia) {
 		int disttotal = 0;
+		// intera na matriz objetivo
 		for (int linhaob = 0; linhaob < 3; linhaob++) {
 			for (int colunaob = 0; colunaob < 3; colunaob++) {
 				int valorob = objetivo[linhaob][colunaob];
+				// intera na matriz criada
 				for (int linhama = 0; linhama < 3; linhama++) {
 					for (int colunama = 0; colunama < 3; colunama++) {
 						int valorma = matriz[linhama][colunama];
 						int distvalor = 0;
+						// quando o valor da matriz criada é igual a da matriz objetivo entra no if
 						if (valorob == valorma) {
 							int distcol = colunaob - colunama;
 							int distlin = linhaob - linhama;
