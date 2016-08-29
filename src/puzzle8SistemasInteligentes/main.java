@@ -40,14 +40,14 @@ public class main {
 							int distcol = colunaob - colunama;
 							int distlin = linhaob - linhama;
 							distvalor = Math.abs(distcol) + Math.abs(distlin);
-							System.out.println("valorob: " + valorob + "distvalor: " + distvalor);
+							System.out.println("valorob: " + valorob + " | distvalor: " + distvalor);
 						}
 						disttotal += distvalor;
 					}
 				}
 			}
 		}
-		System.out.println("disttotal" + disttotal);
+		System.out.println("disttotal: " + disttotal);
 	}
 
 	public static void main(String[] args) {
