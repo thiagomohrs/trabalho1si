@@ -30,33 +30,33 @@ public class main {
 	}
 
 	public static void calculaDistancia(int[][] matriz, int objetivo[][], List<Integer> distancia) {
-		int disttotal = 0;
+		int distanciaTotal = 0;
 		// intera na matriz objetivo
-		for (int linhaob = 0; linhaob < 3; linhaob++) {
-			for (int colunaob = 0; colunaob < 3; colunaob++) {
-				int valorob = objetivo[linhaob][colunaob];
+		for (int linhaobjetivo = 0; linhaobjetivo < 3; linhaobjetivo++) {
+			for (int colunaobjetivo = 0; colunaobjetivo < 3; colunaobjetivo++) {
+				int valorob = objetivo[linhaobjetivo][colunaobjetivo];
 				// intera na matriz criada
-				for (int linhama = 0; linhama < 3; linhama++) {
-					for (int colunama = 0; colunama < 3; colunama++) {
-						int valorma = matriz[linhama][colunama];
-						int distvalor = 0;
+				for (int linhamatriz = 0; linhamatriz < 3; linhamatriz++) {
+					for (int colunamatriz = 0; colunamatriz < 3; colunamatriz++) {
+						int valorma = matriz[linhamatriz][colunamatriz];
+						int distanciaDoValor = 0;
 						// quando o valor da matriz criada é igual a da matriz objetivo entra no if
 						if (valorob == valorma) {
-							int distcol = colunaob - colunama;
-							int distlin = linhaob - linhama;
-							distvalor = Math.abs(distcol) + Math.abs(distlin);
+							int distanciaColulas = colunaobjetivo - colunamatriz;
+							int distanciaLinhas = linhaobjetivo - linhamatriz;
+							distanciaDoValor = Math.abs(distanciaColulas) + Math.abs(distanciaLinhas);
 							// adiciona a distancia para aquela peça no arraylist
-							distancia.set(valorob, distvalor);
+							distancia.set(valorob, distanciaDoValor);
 							// imprime a distancia para cada peça(numero)
-							System.out.println("Peça nº: " + valorob + " | Distancia de posição objetivo: " + distvalor);
+							System.out.println("Peça nº: " + valorob + " | Distancia de posição objetivo: " + distanciaDoValor);
 						}
-						disttotal += distvalor;
+						distanciaTotal += distanciaDoValor;
 					}
 				}
 			}
 		}
 		// imprime somatorio de todas as distancias
-		System.out.println("disttotal: " + disttotal);
+		System.out.println("disttotal: " + distanciaTotal);
 	}
 
 	public static int[][] criarMatrizAleatoria(int[][] matriz) {
@@ -90,9 +90,20 @@ public class main {
 		return distanciaTotal;
 	}
 
-	public static int verificarSePosicaoObjetivoEstaProxima(int[][] matriz, int objetivo[][], int peca) {
+	// acho melhor dividir em varios metodos: verificarPosicaoObjetivoByPeca
+	public static int verificarPecaNaPosicaoObjetivoByPeca(int[][] matriz, int objetivo[][], int peca) {
 		int valor = 0;
 		// TODO metodo para mudar ditancia dependendo da posicao objetivo
+		// verificar qual peça está na posição objetivo da peça que veio por parametro, e verificar se a posição objetivo da peça que está no objetivo é a que a peça que veio por
+		// parametro está localizada
+		for (int linhaobjetivo = 0; linhaobjetivo < 3; linhaobjetivo++) {
+			for (int colunaobjetivo = 0; colunaobjetivo < 3; colunaobjetivo++) {
+				int valorObjetivo = objetivo[linhaobjetivo][colunaobjetivo];
+				if (peca == valorObjetivo) {
+					valor = matriz[linhaobjetivo][colunaobjetivo];
+				}
+			}
+		}
 		return valor;
 	}
 
@@ -107,7 +118,7 @@ public class main {
 		// ArrayList para salvar a peça e sua distancia
 		// index é o valor da peça
 		List<Integer> distancia = new ArrayList<>();
-		// inicia index 0 com dist -1
+		// inicia arraylist com -1
 		distancia.add(-1);
 		distancia.add(-1);
 		distancia.add(-1);
@@ -133,10 +144,21 @@ public class main {
 		System.out.println(distancia);
 		imprimirPeloArrayList(distancia);
 
-		System.out.println("Distancia Total: " + calculaDistanciaTotal(distancia));
+		int distanciaTotal = calculaDistanciaTotal(distancia);
 
-		verificarSePosicaoObjetivoEstaProxima(matriz, objetivo, 1);
+		// Aqui verifica se o objetivo da peca que esta na posição objetivo é a propria peça e adiciona + 1 a distancia total
+		// FIXME ta errado :) mas ta meio certo
+		for (int i = 1; i < distancia.size(); i++) {
+			if (verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, i) == verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo,
+					verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, i))) {
+				int valor = distancia.get(i);
+				distancia.set(i, valor + 1);
+				distanciaTotal += 1;
+			}
+		}
 
+		System.out.println(distancia);
+		imprimirPeloArrayList(distancia);
+		System.out.println("Distancia Total: " + distanciaTotal);
 	}
-
 }
