@@ -43,7 +43,7 @@ public class main {
 							int distlin = linhaob - linhama;
 							distvalor = Math.abs(distcol) + Math.abs(distlin);
 							// adiciona a distancia para aquela peça no arraylist
-							distancia.add(valorob, distvalor);
+							distancia.set(valorob, distvalor);
 							// imprime a distancia para cada peça(numero)
 							System.out.println("Peça nº: " + valorob + " | Distancia de posição objetivo: " + distvalor);
 						}
@@ -105,6 +105,15 @@ public class main {
 		// index é o valor da peça
 		List<Integer> distancia = new ArrayList<>();
 		// inicia index 0 com dist -1
+		distancia.add(-1);
+		distancia.add(-1);
+		distancia.add(-1);
+		distancia.add(-1);
+		distancia.add(-1);
+		distancia.add(-1);
+		distancia.add(-1);
+		distancia.add(-1);
+		distancia.add(-1);
 		distancia.add(-1);
 
 		// pede para usuario criar matriz
