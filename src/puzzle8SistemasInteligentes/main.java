@@ -147,14 +147,21 @@ public class main {
 		int distanciaTotal = calculaDistanciaTotal(distancia);
 
 		// Aqui verifica se o objetivo da peca que esta na posição objetivo é a propria peça e adiciona + 1 a distancia total
-		// FIXME ta errado :) mas ta meio certo
+		// FIXME ta errado :) mas ta meio certo, tem que testar, etc
 		for (int i = 1; i < distancia.size(); i++) {
-			if (verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, i) == verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo,
-					verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, i))) {
-				int valor = distancia.get(i);
-				distancia.set(i, valor + 1);
-				distanciaTotal += 1;
+			int pecaNaPosicaoObjetivo = verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, i);
+			if (pecaNaPosicaoObjetivo != i) {
+				if (pecaNaPosicaoObjetivo == verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, pecaNaPosicaoObjetivo)) {
+					int valor = distancia.get(i);
+					distancia.set(i, valor + 1);
+					distanciaTotal += 1;
+				}
 			}
+			// else {
+			// int valor = distancia.get(i);
+			// distancia.set(i, valor - 1);
+			// distanciaTotal -= 1;
+			// }
 		}
 
 		System.out.println(distancia);
