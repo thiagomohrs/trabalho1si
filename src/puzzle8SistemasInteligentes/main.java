@@ -79,18 +79,18 @@ public class main {
 
 	}
 
-	public static int verificarSePosicaoObjetivoEstaProxima(int[][] matriz, int objetivo[][], int peca) {
-		int valor = 0;
-
-		return valor;
-	}
-
 	public static int calculaDistanciaTotal(List<Integer> distancia) {
 		int distanciaTotal = 0;
 		for (int i = 1; i < distancia.size(); i++) {
 			distanciaTotal += distancia.get(i);
 		}
 		return distanciaTotal;
+	}
+
+	public static int verificarSePosicaoObjetivoEstaProxima(int[][] matriz, int objetivo[][], int peca) {
+		int valor = 0;
+		// TODO metodo para mudar ditancia dependendo da posicao objetivo
+		return valor;
 	}
 
 	public static void main(String[] args) {
