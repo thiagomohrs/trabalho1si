@@ -1,13 +1,14 @@
 package puzzle8SistemasInteligentes;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-public class main {
+import javax.swing.JFrame;
 
-	public static void imprimir(int[][] matriz) {
+public class Main {
+
+	public static void imprimirMatriz3x3(int[][] matriz) {
 		System.out.println("\nA Matriz ficou: \n");
 		for (int linha = 0; linha < 3; linha++) {
 			for (int coluna = 0; coluna < 3; coluna++) {
@@ -17,7 +18,7 @@ public class main {
 		}
 	}
 
-	public static int[][] criarMatriz(int[][] matriz) {
+	public static int[][] usuarioCriarMatriz(int[][] matriz) {
 		System.out.println("Matriz M[3][3]\n");
 
 		for (int linha = 0; linha < 3; linha++) {
@@ -48,20 +49,20 @@ public class main {
 							// adiciona a distancia para aquela peça no arraylist
 							distancia.set(valorob, distanciaDoValor);
 							// imprime a distancia para cada peça(numero)
-							System.out.println("Peça nº: " + valorob + " | Distancia de posição objetivo: " + distanciaDoValor);
+							//System.out.println("Peça nº: " + valorob + " | Distancia de posição objetivo: " + distanciaDoValor);
 						}
-						distanciaTotal += distanciaDoValor;
+						distanciaTotal = distanciaTotal + distanciaDoValor;
 					}
 				}
 			}
 		}
 		// imprime somatorio de todas as distancias
-		System.out.println("disttotal: " + distanciaTotal);
+		//System.out.println("distTotal: " + distanciaTotal);
 	}
 
 	public static int[][] criarMatrizAleatoria(int[][] matriz) {
 		List<Integer> numeros = new ArrayList<>();
-		for (int i = 0; i < 9; i++) { // Sequencia da mega sena
+		for (int i = 0; i < 9; i++) {
 			numeros.add(i);
 		}
 		Collections.shuffle(numeros);
@@ -106,9 +107,15 @@ public class main {
 		}
 		return valor;
 	}
+	
+	public static void iniciarArrayList(List<Integer> array){
+		for (int i = 0; i < 10; i++) {
+			array.add(-1);
+		}
+	}
 
 	public static void main(String[] args) {
-
+		
 		// matriz objetivo
 		int objetivo[][] = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
 
@@ -119,30 +126,21 @@ public class main {
 		// index é o valor da peça
 		List<Integer> distancia = new ArrayList<>();
 		// inicia arraylist com -1
-		distancia.add(-1);
-		distancia.add(-1);
-		distancia.add(-1);
-		distancia.add(-1);
-		distancia.add(-1);
-		distancia.add(-1);
-		distancia.add(-1);
-		distancia.add(-1);
-		distancia.add(-1);
-		distancia.add(-1);
-
+		iniciarArrayList(distancia);
+		
 		// pede para usuario criar matriz
 		// criarMatriz(matriz);
 
 		// cria matriz aleatória
 		criarMatrizAleatoria(matriz);
+		
+		Window m = new Window(matriz);
+		m.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// imprime matriz criada
-		imprimir(matriz);
+		imprimirMatriz3x3(matriz);
 
 		calculaDistancia(matriz, objetivo, distancia);
-
-		System.out.println(distancia);
-		imprimirPeloArrayList(distancia);
 
 		int distanciaTotal = calculaDistanciaTotal(distancia);
 
@@ -164,7 +162,7 @@ public class main {
 			// }
 		}
 
-		System.out.println(distancia);
+		//System.out.println(distancia);
 		imprimirPeloArrayList(distancia);
 		System.out.println("Distancia Total: " + distanciaTotal);
 	}
