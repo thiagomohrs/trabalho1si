@@ -108,7 +108,63 @@ public class Main {
 			array.add(-1);
 		}
 	}
+	
+	public static int  calculaPecasForaDaPosicao(List<Integer> distancia){
+		int numeroDePecasForaDaPosicao = 0;
+		for (int i = 1; i < distancia.size(); i++) {
+			if(distancia.get(i) > 0){
+				numeroDePecasForaDaPosicao++;
+			}
+		}
+		return numeroDePecasForaDaPosicao;
+	}
 
+	public static boolean isMatrizIgualMatrizObjetivo(int matriz[][], int objetivo[][]){
+		if(matriz == objetivo){
+			return true;
+		}
+		return false;
+	}
+	
+	public static int[][] movimento(int matriz[][], List<Integer> distancia){
+		int maior = 0;
+		for (int i = 0; i < matriz.length; i++) {
+			for (int j = 0; j < matriz.length; j++) {
+				if(matriz[i][j] == 9){
+					List<Integer> valoresProximos = new ArrayList();
+					if (i-1 >= 0 && i-1 <= 2) {
+						valoresProximos.add(matriz[i-1][j]);
+					}
+					if (i+1 >= 0 && i+1 <= 2) {
+						valoresProximos.add(matriz[i+1][j]);
+					}
+					if (j-1 >= 0 && j-1 <= 2) {
+						valoresProximos.add(matriz[i][j-1]);
+					}
+					if (j+1 >= 0 && j+1 <= 2) {
+						valoresProximos.add(matriz[i][j+1]);
+					}
+					for (int j1 = 0; j1 < valoresProximos.size(); j1++) {
+						if(distancia.get(valoresProximos.get(j1)) > distancia.get(valoresProximos.get(maior)) ){
+							maior = valoresProximos.get(j1);
+						}
+					}
+					for (int i2 = 0; i2 < 3; i2++) {
+						for (int j2 = 0; j2 < 3; j2++) {
+							if(matriz[i2][j2] == maior){
+								matriz[i][j] = maior;
+								matriz[i2][j2] = 9;
+								imprimirMatriz3x3(matriz);
+							}
+						}
+					}
+				}
+			}
+
+		}
+		return matriz;
+	}
+	
 	public static void main(String[] args) {
 
 		// matriz objetivo
@@ -157,13 +213,16 @@ public class Main {
 			// }
 		}
 
-		do {
-			// movimento
-			// repaint window
-			// m.repaint();
-		} while (objetivo != matriz);
 
 		imprimirPeloArrayList(distancia);
 		System.out.println("Distancia Total: " + distanciaTotal);
+		
+		System.out.println("Numero de peças fora da posição: " + calculaPecasForaDaPosicao(distancia));
+		
+		do {
+			movimento(matriz, distancia);
+		} while (objetivo != matriz);
+		imprimirMatriz3x3(matriz);
 	}
+	
 }
