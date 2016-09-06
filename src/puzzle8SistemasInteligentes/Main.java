@@ -1,4 +1,5 @@
 package puzzle8SistemasInteligentes;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +32,6 @@ public class Main {
 	}
 
 	public static void calculaDistancia(int[][] matriz, int objetivo[][], List<Integer> distancia) {
-		int distanciaTotal = 0;
 		// intera na matriz objetivo
 		for (int linhaobjetivo = 0; linhaobjetivo < 3; linhaobjetivo++) {
 			for (int colunaobjetivo = 0; colunaobjetivo < 3; colunaobjetivo++) {
@@ -48,16 +48,11 @@ public class Main {
 							distanciaDoValor = Math.abs(distanciaColulas) + Math.abs(distanciaLinhas);
 							// adiciona a distancia para aquela peça no arraylist
 							distancia.set(valorob, distanciaDoValor);
-							// imprime a distancia para cada peça(numero)
-							//System.out.println("Peça nº: " + valorob + " | Distancia de posição objetivo: " + distanciaDoValor);
 						}
-						distanciaTotal = distanciaTotal + distanciaDoValor;
 					}
 				}
 			}
 		}
-		// imprime somatorio de todas as distancias
-		//System.out.println("distTotal: " + distanciaTotal);
 	}
 
 	public static int[][] criarMatrizAleatoria(int[][] matriz) {
@@ -107,15 +102,15 @@ public class Main {
 		}
 		return valor;
 	}
-	
-	public static void iniciarArrayList(List<Integer> array){
+
+	public static void iniciarArrayList(List<Integer> array) {
 		for (int i = 0; i < 10; i++) {
 			array.add(-1);
 		}
 	}
 
 	public static void main(String[] args) {
-		
+
 		// matriz objetivo
 		int objetivo[][] = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
 
@@ -127,13 +122,13 @@ public class Main {
 		List<Integer> distancia = new ArrayList<>();
 		// inicia arraylist com -1
 		iniciarArrayList(distancia);
-		
+
 		// pede para usuario criar matriz
 		// criarMatriz(matriz);
 
 		// cria matriz aleatória
 		criarMatrizAleatoria(matriz);
-		
+
 		Window m = new Window(matriz);
 		m.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -162,7 +157,12 @@ public class Main {
 			// }
 		}
 
-		//System.out.println(distancia);
+		do {
+			// movimento
+			// repaint window
+			// m.repaint();
+		} while (objetivo != matriz);
+
 		imprimirPeloArrayList(distancia);
 		System.out.println("Distancia Total: " + distanciaTotal);
 	}
