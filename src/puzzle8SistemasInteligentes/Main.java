@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 
 public class Main {
 
+	int distanciaTotal = 0;
+
 	public static void imprimirMatriz3x3(int[][] matriz) {
 		System.out.println("\nA Matriz ficou: \n");
 		for (int linha = 0; linha < 3; linha++) {
@@ -86,10 +88,24 @@ public class Main {
 		return distanciaTotal;
 	}
 
+	public static int adicionarBonusDeDistanciaParaPecasComObjetivosInversos(int[][] matriz, int objetivo[][], List<Integer> distancia, int distanciaTotal) {
+		// Aqui verifica se o objetivo da peca que esta na posição objetivo é a propria peça e adiciona + 1 a distancia total
+		for (int i = 1; i < distancia.size(); i++) {
+			int pecaNaPosicaoObjetivo = verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, i);
+			if (pecaNaPosicaoObjetivo != i) {
+				if (pecaNaPosicaoObjetivo == verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, pecaNaPosicaoObjetivo)) {
+					int valor = distancia.get(i);
+					distancia.set(i, valor + 1);
+					distanciaTotal += 1;
+				}
+			}
+		}
+		return distanciaTotal;
+	}
+
 	// acho melhor dividir em varios metodos: verificarPosicaoObjetivoByPeca
 	public static int verificarPecaNaPosicaoObjetivoByPeca(int[][] matriz, int objetivo[][], int peca) {
 		int valor = 0;
-		// TODO metodo para mudar ditancia dependendo da posicao objetivo
 		// verificar qual peça está na posição objetivo da peça que veio por parametro, e verificar se a posição objetivo da peça que está no objetivo é a que a peça que veio por
 		// parametro está localizada
 		for (int linhaobjetivo = 0; linhaobjetivo < 3; linhaobjetivo++) {
@@ -108,63 +124,72 @@ public class Main {
 			array.add(-1);
 		}
 	}
-	
-	public static int  calculaPecasForaDaPosicao(List<Integer> distancia){
+
+	public static int calculaPecasForaDaPosicao(List<Integer> distancia) {
 		int numeroDePecasForaDaPosicao = 0;
 		for (int i = 1; i < distancia.size(); i++) {
-			if(distancia.get(i) > 0){
+			if (distancia.get(i) > 0) {
 				numeroDePecasForaDaPosicao++;
 			}
 		}
 		return numeroDePecasForaDaPosicao;
 	}
 
-	public static boolean isMatrizIgualMatrizObjetivo(int matriz[][], int objetivo[][]){
-		if(matriz == objetivo){
+	public static boolean isMatrizIgualMatrizObjetivo(int matriz[][], int objetivo[][]) {
+		if (matriz == objetivo) {
 			return true;
 		}
 		return false;
 	}
-	
-	public static int[][] movimento(int matriz[][], List<Integer> distancia){
+
+	public static int[][] movimento(int matriz[][], List<Integer> distancia) {
 		int maior = 0;
+		ArrayList<Integer> ultimaPecaTrocada = new ArrayList<>();
 		for (int i = 0; i < matriz.length; i++) {
 			for (int j = 0; j < matriz.length; j++) {
-				if(matriz[i][j] == 9){
+				if (matriz[i][j] == 9) {
 					List<Integer> valoresProximos = new ArrayList();
-					if (i-1 >= 0 && i-1 <= 2) {
-						valoresProximos.add(matriz[i-1][j]);
+					if (i - 1 >= 0 && i - 1 <= 2) {
+						valoresProximos.add(matriz[i - 1][j]);
+						System.out.println("i-1: " + matriz[i - 1][j] + " | Distancia da pocicao objetivo: " + distancia.get(matriz[i - 1][j]));
 					}
-					if (i+1 >= 0 && i+1 <= 2) {
-						valoresProximos.add(matriz[i+1][j]);
+					if (i + 1 >= 0 && i + 1 <= 2) {
+						valoresProximos.add(matriz[i + 1][j]);
+						System.out.println("i+1: " + matriz[i + 1][j] + " | Distancia da pocicao objetivo: " + distancia.get(matriz[i + 1][j]));
 					}
-					if (j-1 >= 0 && j-1 <= 2) {
-						valoresProximos.add(matriz[i][j-1]);
+					if (j - 1 >= 0 && j - 1 <= 2) {
+						valoresProximos.add(matriz[i][j - 1]);
+						System.out.println("j-1: " + matriz[i][j - 1] + " | Distancia da pocicao objetivo: " + distancia.get(matriz[i][j - 1]));
 					}
-					if (j+1 >= 0 && j+1 <= 2) {
-						valoresProximos.add(matriz[i][j+1]);
+					if (j + 1 >= 0 && j + 1 <= 2) {
+						valoresProximos.add(matriz[i][j + 1]);
+						System.out.println("j+1: " + matriz[i][j + 1] + " | Distancia da pocicao objetivo: " + distancia.get(matriz[i][j + 1]));
 					}
+					// FIXME Funciona a primara vez, depois ele fica trocando de lugar com o mesmo
+					// problema parece com o do leandro, vai ter que verificar e pegar outro que não seja o ultimo
 					for (int j1 = 0; j1 < valoresProximos.size(); j1++) {
-						if(distancia.get(valoresProximos.get(j1)) > distancia.get(valoresProximos.get(maior)) ){
+						if (distancia.get(valoresProximos.get(j1)) > distancia.get(valoresProximos.get(maior))) {
 							maior = valoresProximos.get(j1);
 						}
 					}
+					System.out.println("Valor proximo com maior distancia: " + maior);
 					for (int i2 = 0; i2 < 3; i2++) {
 						for (int j2 = 0; j2 < 3; j2++) {
-							if(matriz[i2][j2] == maior){
+							if (matriz[i2][j2] == maior) {
 								matriz[i][j] = maior;
 								matriz[i2][j2] = 9;
 								imprimirMatriz3x3(matriz);
 							}
 						}
 					}
+					ultimaPecaTrocada.add(maior);
 				}
 			}
 
 		}
 		return matriz;
 	}
-	
+
 	public static void main(String[] args) {
 
 		// matriz objetivo
@@ -195,34 +220,18 @@ public class Main {
 
 		int distanciaTotal = calculaDistanciaTotal(distancia);
 
-		// Aqui verifica se o objetivo da peca que esta na posição objetivo é a propria peça e adiciona + 1 a distancia total
-		// FIXME ta errado :) mas ta meio certo, tem que testar, etc
-		for (int i = 1; i < distancia.size(); i++) {
-			int pecaNaPosicaoObjetivo = verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, i);
-			if (pecaNaPosicaoObjetivo != i) {
-				if (pecaNaPosicaoObjetivo == verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, pecaNaPosicaoObjetivo)) {
-					int valor = distancia.get(i);
-					distancia.set(i, valor + 1);
-					distanciaTotal += 1;
-				}
-			}
-			// else {
-			// int valor = distancia.get(i);
-			// distancia.set(i, valor - 1);
-			// distanciaTotal -= 1;
-			// }
-		}
-
+		distanciaTotal = adicionarBonusDeDistanciaParaPecasComObjetivosInversos(matriz, objetivo, distancia, distanciaTotal);
 
 		imprimirPeloArrayList(distancia);
 		System.out.println("Distancia Total: " + distanciaTotal);
-		
+
 		System.out.println("Numero de peças fora da posição: " + calculaPecasForaDaPosicao(distancia));
-		
+
 		do {
 			movimento(matriz, distancia);
+			calculaDistancia(matriz, objetivo, distancia);
 		} while (objetivo != matriz);
 		imprimirMatriz3x3(matriz);
 	}
-	
+
 }
