@@ -12,17 +12,17 @@ public class Window extends JFrame{
 	public JButton[][]  matrizJButton;
 	public Window(int [][] matriz){
 		this.setSize(300,300);
-		componentes(matriz);
-		this.setVisible(true);
-	}
-	public void componentes(int [][] matriz){
 		this.setLayout(new BorderLayout());
 		matrizJButton = new JButton[3][3];
 		panel = new JPanel();
 		panel.setLayout(new GridLayout(3,3));
+		componentes(matriz);
+		this.setVisible(true);
+	}
+	public void componentes(int [][] matriz){
 		for(int i = 0; i < 3; i++){
 			for(int j = 0; j < 3; j++){
-				if(matriz[i][j] == 9){
+				if(matriz[i][j] == 0){
 					matrizJButton[i][j] = new JButton("");
 				}else {
 					matrizJButton[i][j] = new JButton(String.valueOf(matriz[i][j]));
@@ -31,5 +31,19 @@ public class Window extends JFrame{
 			}
 		}
 		this.add(panel, BorderLayout.CENTER);
+	}
+	public void repaintMatriz(int[][] matriz) {
+		for(int i = 0; i < 3; i++){
+			for(int j = 0; j < 3; j++){
+				if(matriz[i][j] == 0){
+					matrizJButton[i][j].setText("");
+					matrizJButton[i][j].repaint();
+				}else {
+					matrizJButton[i][j].setText(String.valueOf(matriz[i][j]));
+					matrizJButton[i][j].repaint();
+				}
+			}
+		}
+		this.repaint();
 	}
 }
