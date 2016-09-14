@@ -4,18 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Nodo implements Comparable<Nodo> {
-	 private int[][] estado = new int[3][3];
+	 protected int[][] estado = new int[3][3];
 	 private int id;
 	 private int idDoNodoPai;
 	 private int custoTotal;
-	 private int posicaoXvazia;
-	 private int posicaoYvazia;
+	 protected int posicaoXvazia;
+	 protected int posicaoYvazia;
+	 protected int posicaoXpeca;
+	 protected int posicaoYpeca;
 	 List<Integer> distanciaDeCadaValor = new ArrayList<>();
 
-	 public Nodo(int id, int[][] estado, int idDoNodoPai) {
+	 public Nodo(int id, int[][] estado, int idDoNodoPai, int custoTotal) {
 	        setEstado(estado);
 	        this.id = id;
 	        this.idDoNodoPai = idDoNodoPai;
+	        this.custoTotal = custoTotal;
 	    }
 	 
 	public int getId() {
@@ -47,7 +50,7 @@ public class Nodo implements Comparable<Nodo> {
     }
 	
 	public int getCustoTotal(){
-		return calculaDistanciaTotalDoNodo(this.estado, Main.matrizObjetivo)+calculaQuantidadeDePecasForaDaPosicao()+calculaPecasComObjetivosInvertidos(this.estado, Main.matrizObjetivo);
+		return calculaDistanciaTotalDoNodo(this.estado, Main.matrizObjetivo)+calculaQuantidadeDePecasForaDaPosicao();
 	}
 
     public void setEstado(int[][] estado) {
@@ -80,8 +83,26 @@ public class Nodo implements Comparable<Nodo> {
 	public void setPosicaoYvazia(int posicaoYvazia) {
 		this.posicaoYvazia = posicaoYvazia;
 	}
+	
+	
 
-	 public void calcularPosicaoVazia() {
+	 public int getPosicaoXpeca() {
+		return posicaoXpeca;
+	}
+
+	public void setPosicaoXpeca(int posicaoXpeca) {
+		this.posicaoXpeca = posicaoXpeca;
+	}
+
+	public int getPosicaoYpeca() {
+		return posicaoYpeca;
+	}
+
+	public void setPosicaoYpeca(int posicaoYpeca) {
+		this.posicaoYpeca = posicaoYpeca;
+	}
+
+	public void calcularPosicaoVazia() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (estado[i][j] == 0) {
@@ -92,6 +113,18 @@ public class Nodo implements Comparable<Nodo> {
             }
         }
     }
+	 
+	public void calcularPosicaoPeca(int peca) {
+	    for (int i = 0; i < 3; i++) {
+	        for (int j = 0; j < 3; j++) {
+	            if (estado[i][j] == peca) {
+	                posicaoXpeca = i;
+	                posicaoYpeca = j;
+	                break;
+	            }
+	        }
+	    }
+	}
 	 
 	public int calculaDistanciaTotalDoNodo(int[][] matriz, int[][] matrizObjetivo){
 		distanciaDeCadaValor.clear();
@@ -114,7 +147,7 @@ public class Nodo implements Comparable<Nodo> {
 				}
 			}
 		}
-		System.out.println(distanciaDeCadaValor);
+		System.out.println("Distancia total do nodo: " + distanciaTotal);
     	return distanciaTotal;
     }
 	
@@ -134,11 +167,12 @@ public class Nodo implements Comparable<Nodo> {
 				numeroDePecasForaDaPosicao++;
 			}
 		}
+		System.out.println("Numero de peças fora da posição: " + numeroDePecasForaDaPosicao);
 		return numeroDePecasForaDaPosicao;
 	}
 	
 	public int calculaPecasComObjetivosInvertidos(int[][] matriz, int[][] objetivo) {
-		int distanciaTotal = 0;
+		int valorTotal = 0;
 		for (int i = 0; i < distanciaDeCadaValor.size(); i++) {
 			int pecaNaPosicaoObjetivo = verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, i);
 			if (pecaNaPosicaoObjetivo != i) {
@@ -146,11 +180,11 @@ public class Nodo implements Comparable<Nodo> {
 					int valor = distanciaDeCadaValor.get(i);
 					distanciaDeCadaValor.set(i+1, valor + 1);
 					System.out.println("Distancia do valor: " + i + "aumentada");
-					distanciaTotal += 1;
+					valorTotal += 1;
 				}
 			}
 		}
-		return distanciaTotal;
+		return valorTotal;
 	}
 	
 	public int verificarPecaNaPosicaoObjetivoByPeca(int[][] matriz, int[][] objetivo, int peca) {
