@@ -9,6 +9,9 @@ public class Main {
 	public static int matrizObjetivo[][] = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 0 } };
 
 //	public static int matriz[][] = { { 2, 1, 3 }, { 4, 7, 5 }, { 6, 8, 0 } };
+//	public static int matriz[][] = { { 1, 7, 2 }, { 0, 6, 7 }, { 5, 4, 3 } };
+//	public static int matriz[][] = { { 2, 1, 3 }, { 5, 0, 7 }, { 8, 4, 6 } };
+	
 	
 	public static int matriz[][] = criarMatrizAleatoria(new int[3][3]);
 	

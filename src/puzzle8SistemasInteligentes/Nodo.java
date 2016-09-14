@@ -12,6 +12,7 @@ public class Nodo implements Comparable<Nodo> {
 	 protected int posicaoYvazia;
 	 protected int posicaoXpeca;
 	 protected int posicaoYpeca;
+	 private int pecaMovida;
 	 List<Integer> distanciaDeCadaValor = new ArrayList<>();
 
 	 public Nodo(int id, int[][] estado, int idDoNodoPai, int custoTotal) {
@@ -50,7 +51,7 @@ public class Nodo implements Comparable<Nodo> {
     }
 	
 	public int getCustoTotal(){
-		return calculaDistanciaTotalDoNodo(this.estado, Main.matrizObjetivo)+calculaQuantidadeDePecasForaDaPosicao();
+		return calculaDistanciaTotalDoNodo(this.estado, Main.matrizObjetivo)+calculaPecasComObjetivosInvertidos(this.estado, Main.matrizObjetivo);
 	}
 
     public void setEstado(int[][] estado) {
@@ -84,9 +85,15 @@ public class Nodo implements Comparable<Nodo> {
 		this.posicaoYvazia = posicaoYvazia;
 	}
 	
-	
+	public int getPecaMovida() {
+		return pecaMovida;
+	}
 
-	 public int getPosicaoXpeca() {
+	public void setPecaMovida(int pecaMovida) {
+		this.pecaMovida = pecaMovida;
+	}
+
+	public int getPosicaoXpeca() {
 		return posicaoXpeca;
 	}
 
@@ -179,7 +186,7 @@ public class Nodo implements Comparable<Nodo> {
 				if (pecaNaPosicaoObjetivo == verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, pecaNaPosicaoObjetivo)) {
 					int valor = distanciaDeCadaValor.get(i);
 					distanciaDeCadaValor.set(i+1, valor + 1);
-					System.out.println("Distancia do valor: " + i + "aumentada");
+					System.out.println("Distancia do valor: " + i + " aumentada");
 					valorTotal += 1;
 				}
 			}

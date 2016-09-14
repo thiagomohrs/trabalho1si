@@ -5,19 +5,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.swing.tree.AbstractLayoutCache.NodeDimensions;
-
 public class Puzzle {
 
 	private List<Nodo> jaVisitados = new ArrayList<Nodo>();
 	private List<Nodo> fronteiras = new ArrayList<Nodo>();
 	private List<Nodo> caminhoFinal = new ArrayList<Nodo>();
-    private int[][] matriz = Main.matriz;
-    private int[][] matrizObjetivo = Main.matrizObjetivo;
-	private Nodo nodoAtual;
+    private Nodo nodoAtual;
 	private Nodo nodoFilho1, nodoFilho2, nodoFilho3, nodoFilho4;
-	private int distanciaTotal = 0;
-    private int maiorFronteira = 0;
+	private int maiorFronteira = 0;
     private int contadorId = 0;
     
 	public int[][] usuarioCriarMatriz(int[][] matriz) {
@@ -36,13 +31,14 @@ public class Puzzle {
         nodoAtual = new Nodo(0, matriz, -1, 0);
 		nodoAtual.imprimirNodo();
 		nodoAtual.getCustoTotal();
-		while (nodoAtual.getEstado() != matrizObjetivo) { //Pergunta se é nodo Objetivo
+		while (nodoAtual.getEstado() != matrizObjetivo) {
 			if (jaVisitados.contains(nodoAtual)) {
 	            fronteiras.remove(nodoAtual);
 	        } 
 			if (fronteiras.size() > 0) {
 				this.ordenarFronteiras();
 	            nodoAtual = fronteiras.get(0);
+	            caminhoFinal.add(nodoAtual);
 			}
 			nodoAtual.calcularPosicaoVazia();
 	        matriz = nodoAtual.getEstado();
@@ -77,15 +73,15 @@ public class Puzzle {
 	        fronteiras.remove(nodoAtual);
 		}
 		nodoAtual.imprimirNodo();
+		System.out.println("Caminho Final" + caminhoFinal);
 	}
 	
 	public Nodo movimento(Nodo nodo, int peca){
-		nodo.calcularPosicaoVazia();
-		nodo.calcularPosicaoPeca(peca);
-		int[][] estado = nodo.getEstado();
-		estado[nodo.getPosicaoXvazia()][nodo.getPosicaoYvazia()] = peca;
-		estado[nodo.getPosicaoXpeca()][nodo.getPosicaoYpeca()] = 0;
-		Nodo novoNodo = new Nodo(nodo.getID()+1, estado , ++contadorId, nodo.getCustoTotal() + 1);
+		Nodo novoNodo = new Nodo(nodo.getID()+1, nodo.estado , ++contadorId, nodo.getCustoTotal() + 1);
+		novoNodo.calcularPosicaoVazia();
+		novoNodo.calcularPosicaoPeca(peca);
+		novoNodo.estado[novoNodo.getPosicaoXvazia()][novoNodo.getPosicaoYvazia()] = peca;
+		novoNodo.estado[novoNodo.getPosicaoXpeca()][novoNodo.getPosicaoYpeca()] = 0;
 		novoNodo.imprimirNodo();
 		return novoNodo;
 	}
@@ -98,6 +94,6 @@ public class Puzzle {
         if (fronteiras.size() > this.maiorFronteira) {
             maiorFronteira = fronteiras.size();
         }
-        System.out.println("Maior Fronteira até agora:" + maiorFronteira);
+        System.out.println("Maior Fronteira até agora: " + maiorFronteira);
     }
 }
