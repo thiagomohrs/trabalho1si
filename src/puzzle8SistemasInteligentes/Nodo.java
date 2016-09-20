@@ -61,6 +61,7 @@ public class Nodo implements Comparable<Nodo> {
                 this.estadoPuzzle[i][j] = estado[i][j];
             }
         }
+        calcularPosicaoVazia();
     }
 
     public int getIdDoNodoPai() {
@@ -108,7 +109,7 @@ public class Nodo implements Comparable<Nodo> {
 	}
 	
 	public int getCustoTotal(){
-		return getCusto()+calculaDistanciaTotalDoNodo(this.estadoPuzzle, Main.matrizObjetivo)+calculaQuantidadeDePecasForaDaPosicao()+calculaPecasComObjetivosInvertidos(this.estadoPuzzle, Main.matrizObjetivo);
+		return getCusto() + calculaHeuristica(this.estadoPuzzle, Main.matrizObjetivo);
 	}
 	
 	public void calcularPosicaoVazia() {
@@ -135,9 +136,9 @@ public class Nodo implements Comparable<Nodo> {
 	    }
 	}
 	 
-	public int calculaDistanciaTotalDoNodo(int[][] matriz, int[][] matrizObjetivo){
+	public int calculaHeuristica(int[][] matriz, int[][] matrizObjetivo){
 		distanciaDeCadaValor.clear();
-    	int distanciaTotal = 0;
+		int distanciaHeuristica = 0;
 		for (int linhaObjetivo = 0; linhaObjetivo < 3; linhaObjetivo++) {
 			for (int colunaObjetivo = 0; colunaObjetivo < 3; colunaObjetivo++) {
 				int valorObjetivo = matrizObjetivo[linhaObjetivo][colunaObjetivo];
@@ -150,13 +151,13 @@ public class Nodo implements Comparable<Nodo> {
 							int distanciaLinhas = linhaObjetivo - linhaMatriz;
 							distanciaDoValor = Math.abs(distanciaColulas) + Math.abs(distanciaLinhas);
 							distanciaDeCadaValor.add(distanciaDoValor);
-							distanciaTotal += distanciaDoValor;
+							distanciaHeuristica += distanciaDoValor;
 						}
 					}
 				}
 			}
 		}
-    	return distanciaTotal;
+    	return distanciaHeuristica;
     }
 	
 	public void imprimirNodo(){
