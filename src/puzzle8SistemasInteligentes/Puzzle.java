@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Puzzle {
-
-	private List<Nodo> jaVisitados = new ArrayList<Nodo>();
+	
 	private List<Nodo> fronteiras = new ArrayList<Nodo>();
 	private List<Nodo> caminhoFinal = new ArrayList<Nodo>();
     private Nodo nodoAtual;
@@ -29,16 +28,21 @@ public class Puzzle {
 	
 	public void resolverJogo(int[][] matriz, int[][] matrizObjetivo) {
         nodoAtual = new Nodo(0, matriz, -1, 0);
+        System.out.println("Nodo inicial: ");
 		nodoAtual.imprimirNodo();
 		nodoAtual.getCustoTotal();
-		while (nodoAtual.getEstado() != matrizObjetivo) {
-			if (jaVisitados.contains(nodoAtual)) {
-	            fronteiras.remove(nodoAtual);
-	        } 
+		while (!isFinalDeJogo(nodoAtual.getEstado())) {
 			if (fronteiras.size() > 0) {
 				this.ordenarFronteiras();
 	            nodoAtual = fronteiras.get(0);
+	            nodoAtual.getCustoTotal();
 	            caminhoFinal.add(nodoAtual);
+	            System.out.println("Nodo Selecionado: ");
+	            nodoAtual.imprimirNodo();
+			}
+			if(isFinalDeJogo(nodoAtual.getEstado())){
+				System.out.println("Total de nodos: " + caminhoFinal.size());
+				break;
 			}
 			nodoAtual.calcularPosicaoVazia();
 	        matriz = nodoAtual.getEstado();
@@ -47,44 +51,60 @@ public class Puzzle {
 				if(matriz[i][j] == 0){
 					if (i - 1 >= 0 && i - 1 <= 2) {
 						int peca = matriz[i - 1][j];
-						nodoFilho1 = movimento(nodoAtual, peca);
+						Nodo nodoAux = nodoAtual;
+						nodoFilho1 = movimento(nodoAux, peca);
 						fronteiras.add(nodoFilho1);
 					}
 					if (i + 1 >= 0 && i + 1 <= 2) {
 						int peca = matriz[i + 1][j];
-						nodoFilho2 = movimento(nodoAtual, peca);
+						Nodo nodoAux = nodoAtual;
+						nodoFilho2 = movimento(nodoAux, peca);
 						fronteiras.add(nodoFilho2);
 					}
 					if (j - 1 >= 0 && j - 1 <= 2) {
 						int peca = matriz[i][j - 1];
-						nodoFilho3 = movimento(nodoAtual, peca);
+						Nodo nodoAux = nodoAtual;
+						nodoFilho3 = movimento(nodoAux, peca);
 						fronteiras.add(nodoFilho3);
 					}
-					if (j - 1 >= 0 && j + 1 <= 2) {
+					if (j + 1 >= 0 && j + 1 <= 2) {
 						int peca = matriz[i][j + 1];
-						nodoFilho4 = movimento(nodoAtual, peca);
+						Nodo nodoAux = nodoAtual;
+						nodoFilho4 = movimento(nodoAux, peca);
 						fronteiras.add(nodoFilho4);
 					}
 				}
 			}
 		}
-			jaVisitados.add(nodoAtual);
 	        maiorFronteira();
 	        fronteiras.remove(nodoAtual);
 		}
+		System.out.println("Nodo Final: ");
 		nodoAtual.imprimirNodo();
-		System.out.println("Caminho Final" + caminhoFinal);
 	}
 	
 	public Nodo movimento(Nodo nodo, int peca){
-		Nodo novoNodo = new Nodo(nodo.getID()+1, nodo.estado , ++contadorId, nodo.getCustoTotal() + 1);
+		Nodo novoNodo = new Nodo(contadorId++, nodo.estadoPuzzle , nodo.getId(), nodo.getCustoTotal());
 		novoNodo.calcularPosicaoVazia();
 		novoNodo.calcularPosicaoPeca(peca);
-		novoNodo.estado[novoNodo.getPosicaoXvazia()][novoNodo.getPosicaoYvazia()] = peca;
-		novoNodo.estado[novoNodo.getPosicaoXpeca()][novoNodo.getPosicaoYpeca()] = 0;
+		novoNodo.estadoPuzzle[novoNodo.getPosicaoXvazia()][novoNodo.getPosicaoYvazia()] = peca;
+		novoNodo.estadoPuzzle[novoNodo.getPosicaoXpeca()][novoNodo.getPosicaoYpeca()] = 0;
+		novoNodo.getCustoTotal();
+		System.out.println("Nodo Filho: ");
 		novoNodo.imprimirNodo();
 		return novoNodo;
 	}
+	
+    public boolean isFinalDeJogo(int[][] matriz) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (matriz[i][j] != Main.matrizObjetivo[i][j]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 	
     private void ordenarFronteiras() {
         Collections.sort(fronteiras);

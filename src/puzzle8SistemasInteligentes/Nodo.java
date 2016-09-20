@@ -3,11 +3,12 @@ package puzzle8SistemasInteligentes;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Nodo implements Comparable<Nodo> {
-	 protected int[][] estado = new int[3][3];
+	 protected int[][] estadoPuzzle = new int[3][3];
 	 private int id;
 	 private int idDoNodoPai;
-	 private int custoTotal;
+	 private int custo;
 	 protected int posicaoXvazia;
 	 protected int posicaoYvazia;
 	 protected int posicaoXpeca;
@@ -15,11 +16,11 @@ public class Nodo implements Comparable<Nodo> {
 	 private int pecaMovida;
 	 List<Integer> distanciaDeCadaValor = new ArrayList<>();
 
-	 public Nodo(int id, int[][] estado, int idDoNodoPai, int custoTotal) {
+	 public Nodo(int id, int[][] estado, int idDoNodoPai, int custo) {
 	        setEstado(estado);
 	        this.id = id;
 	        this.idDoNodoPai = idDoNodoPai;
-	        this.custoTotal = custoTotal;
+	        this.custo = custo;
 	    }
 	 
 	public int getId() {
@@ -42,27 +43,24 @@ public class Nodo implements Comparable<Nodo> {
 		this.idDoNodoPai = idDoNodoPai;
 	}
 
-	public void setCustoTotal(int custoTotal) {
-		this.custoTotal = custoTotal;
+	public void setCusto(int custoTotal) {
+		this.custo = custoTotal;
 	}
 
 	public int[][] getEstado() {
-        return estado;
+        return estadoPuzzle;
     }
 	
-	public int getCustoTotal(){
-		return calculaDistanciaTotalDoNodo(this.estado, Main.matrizObjetivo)+calculaPecasComObjetivosInvertidos(this.estado, Main.matrizObjetivo);
+	public int getCusto(){
+		return custo;
 	}
 
-    public void setEstado(int[][] estado) {
+	public void setEstado(int[][] estado) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                this.estado[i][j] = estado[i][j];
+                this.estadoPuzzle[i][j] = estado[i][j];
             }
         }
-    }
-    public int getID() {
-        return id;
     }
 
     public int getIdDoNodoPai() {
@@ -108,11 +106,15 @@ public class Nodo implements Comparable<Nodo> {
 	public void setPosicaoYpeca(int posicaoYpeca) {
 		this.posicaoYpeca = posicaoYpeca;
 	}
-
+	
+	public int getCustoTotal(){
+		return getCusto()+calculaDistanciaTotalDoNodo(this.estadoPuzzle, Main.matrizObjetivo)+calculaQuantidadeDePecasForaDaPosicao()+calculaPecasComObjetivosInvertidos(this.estadoPuzzle, Main.matrizObjetivo);
+	}
+	
 	public void calcularPosicaoVazia() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (estado[i][j] == 0) {
+                if (estadoPuzzle[i][j] == 0) {
                     posicaoXvazia = i;
                     posicaoYvazia = j;
                     break;
@@ -124,7 +126,7 @@ public class Nodo implements Comparable<Nodo> {
 	public void calcularPosicaoPeca(int peca) {
 	    for (int i = 0; i < 3; i++) {
 	        for (int j = 0; j < 3; j++) {
-	            if (estado[i][j] == peca) {
+	            if (estadoPuzzle[i][j] == peca) {
 	                posicaoXpeca = i;
 	                posicaoYpeca = j;
 	                break;
@@ -154,17 +156,17 @@ public class Nodo implements Comparable<Nodo> {
 				}
 			}
 		}
-		System.out.println("Distancia total do nodo: " + distanciaTotal);
     	return distanciaTotal;
     }
 	
 	public void imprimirNodo(){
 		for (int linha = 0; linha < 3; linha++) {
 			for (int coluna = 0; coluna < 3; coluna++) {
-				System.out.printf("\t %d \t", estado[linha][coluna]);
+				System.out.printf("\t %d \t", estadoPuzzle[linha][coluna]);
 			}
 			System.out.println();
 		}
+		System.out.println("------------------------------------------");
 	}
 	
 	public int calculaQuantidadeDePecasForaDaPosicao(){
@@ -174,7 +176,6 @@ public class Nodo implements Comparable<Nodo> {
 				numeroDePecasForaDaPosicao++;
 			}
 		}
-		System.out.println("Numero de peças fora da posição: " + numeroDePecasForaDaPosicao);
 		return numeroDePecasForaDaPosicao;
 	}
 	
@@ -186,7 +187,6 @@ public class Nodo implements Comparable<Nodo> {
 				if (pecaNaPosicaoObjetivo == verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, pecaNaPosicaoObjetivo)) {
 					int valor = distanciaDeCadaValor.get(i);
 					distanciaDeCadaValor.set(i+1, valor + 1);
-					System.out.println("Distancia do valor: " + i + " aumentada");
 					valorTotal += 1;
 				}
 			}
