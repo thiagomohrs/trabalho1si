@@ -4,22 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author Thiago
- */
 class Jogo {
 
 	private List<Nodo> nodosJaVisitados = new ArrayList<>();
 	private List<Nodo> nodosFronteiras = new ArrayList<>();
 	private List<Nodo> nodosCaminhoFinal = new ArrayList<>();
 	private Nodo nodoAtual, nodoFilho1, nodoFilho2, nodoFilho3, nodoFilho4;
-	private int[][] matriz = { { 2, 1, 3 }, { 5, 0, 7 }, { 8, 4, 6 } };
+	private int[][] matriz = { { 2, 1, 3 }, { 5, 0, 7 }, { 8, 4, 6 } }; // 18 passos
+	// private int[][] matriz = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 0, 8 } }; // 1 passos
 	private int[][] matrizObjetivo = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 0 } };
 	private int contadorID = 0;
 	private int maiorFronteira = 0;
@@ -51,112 +43,114 @@ class Jogo {
 					// FAZ AS TROCAS E CRIA OS NODOS FILHOS
 					// 0 NA POSICAO 00
 					if (this.nodoAtual.getPosicaoXvazia() > 0) {
-						this.nodoFilho3 = this.moveCima(this.nodoAtual);
+						this.nodoFilho1 = this.moveCima(this.nodoAtual);
 						this.nodosFronteiras.add(this.nodoFilho1);
 					}
 					if (this.nodoAtual.getPosicaoXvazia() < 2) {
-						this.nodoFilho3 = this.moveCima(this.nodoAtual);
-						this.nodosFronteiras.add(this.nodoFilho1);
+						this.nodoFilho2 = this.moveBaixo(this.nodoAtual);
+						this.nodosFronteiras.add(this.nodoFilho2);
 					}
 					if (this.nodoAtual.getPosicaoYvazia() > 0) {
-						this.nodoFilho3 = this.moveCima(this.nodoAtual);
-						this.nodosFronteiras.add(this.nodoFilho1);
+						this.nodoFilho3 = this.moveEsquerda(this.nodoAtual);
+						this.nodosFronteiras.add(this.nodoFilho3);
 					}
 					if (this.nodoAtual.getPosicaoYvazia() < 2) {
-						this.nodoFilho3 = this.moveCima(this.nodoAtual);
-						this.nodosFronteiras.add(this.nodoFilho1);
+						this.nodoFilho4 = this.moveDireita(this.nodoAtual);
+						this.nodosFronteiras.add(this.nodoFilho4);
 					}
-					if (this.nodoAtual.getPosicaoXvazia() == 0 && this.nodoAtual.getPosicaoYvazia() == 0) {
-						this.nodoFilho1 = this.moveBaixo(this.nodoAtual);
-						this.nodosFronteiras.add(this.nodoFilho1);
-						this.nodoFilho2 = this.moveDireita(this.nodoAtual);
-						this.nodosFronteiras.add(this.nodoFilho2);
-					} else {
-						// 0 NA POSICAO 01
-						if (this.nodoAtual.getPosicaoXvazia() == 0 && this.nodoAtual.getPosicaoYvazia() == 1) {
-							this.nodoFilho1 = this.moveEsquerda(this.nodoAtual);
-							this.nodoFilho2 = this.moveDireita(this.nodoAtual);
-							this.nodoFilho3 = this.moveBaixo(this.nodoAtual);
-							this.nodosFronteiras.add(this.nodoFilho1);
-							this.nodosFronteiras.add(this.nodoFilho2);
-							this.nodosFronteiras.add(this.nodoFilho3);
-						} else {
-							// 0 NA POSICAO 02
-							if (this.nodoAtual.getPosicaoXvazia() == 0 && this.nodoAtual.getPosicaoYvazia() == 2) {
-								this.nodoFilho1 = this.moveBaixo(this.nodoAtual);
-								this.nodoFilho2 = this.moveEsquerda(this.nodoAtual);
-								this.nodosFronteiras.add(this.nodoFilho1);
-								this.nodosFronteiras.add(this.nodoFilho2);
-
-							} else {
-								// 0 NA POSICAO 10
-								if (this.nodoAtual.getPosicaoXvazia() == 1 && this.nodoAtual.getPosicaoYvazia() == 0) {
-									this.nodoFilho1 = this.moveBaixo(this.nodoAtual);
-									this.nodoFilho2 = this.moveDireita(this.nodoAtual);
-									this.nodoFilho3 = this.moveCima(this.nodoAtual);
-									this.nodosFronteiras.add(this.nodoFilho1);
-									this.nodosFronteiras.add(this.nodoFilho2);
-									this.nodosFronteiras.add(this.nodoFilho3);
-								} else {
-									// 0 NA POSICAO 11
-									if (this.nodoAtual.getPosicaoXvazia() == 1 && this.nodoAtual.getPosicaoYvazia() == 1) {
-										this.nodoFilho1 = this.moveBaixo(this.nodoAtual);
-										this.nodoFilho2 = this.moveDireita(this.nodoAtual);
-										this.nodoFilho3 = this.moveEsquerda(this.nodoAtual);
-										this.nodoFilho4 = this.moveCima(this.nodoAtual);
-										this.nodosFronteiras.add(this.nodoFilho1);
-										this.nodosFronteiras.add(this.nodoFilho2);
-										this.nodosFronteiras.add(this.nodoFilho3);
-										this.nodosFronteiras.add(this.nodoFilho4);
-									} else {
-										// 0 NA POSICAO 12
-										if (this.nodoAtual.getPosicaoXvazia() == 1 && this.nodoAtual.getPosicaoYvazia() == 2) {
-
-											this.nodoFilho1 = this.moveBaixo(this.nodoAtual);
-											this.nodosFronteiras.add(this.nodoFilho1);
-											this.nodoFilho2 = this.moveEsquerda(this.nodoAtual);
-											this.nodosFronteiras.add(this.nodoFilho2);
-											this.nodoFilho3 = this.moveCima(this.nodoAtual);
-											this.nodosFronteiras.add(this.nodoFilho3);
-										} else {
-											// 0 NA POSICAO 20
-											if (this.nodoAtual.getPosicaoXvazia() == 2 && this.nodoAtual.getPosicaoYvazia() == 0) {
-												this.nodoFilho1 = this.moveCima(this.nodoAtual);
-												this.nodoFilho2 = this.moveDireita(this.nodoAtual);
-												this.nodosFronteiras.add(this.nodoFilho1);
-												this.nodosFronteiras.add(this.nodoFilho2);
-
-											} else {
-
-												// 0 NA POSICAO 21
-												if (this.nodoAtual.getPosicaoXvazia() == 2 && this.nodoAtual.getPosicaoYvazia() == 1) {
-													this.nodoFilho1 = this.moveDireita(this.nodoAtual);
-													this.nodoFilho2 = this.moveEsquerda(this.nodoAtual);
-													this.nodoFilho3 = this.moveCima(this.nodoAtual);
-													this.nodosFronteiras.add(this.nodoFilho1);
-													this.nodosFronteiras.add(this.nodoFilho2);
-													this.nodosFronteiras.add(this.nodoFilho3);
-
-												} else {
-
-													// 0 NA POSICAO 22
-													if (this.nodoAtual.getPosicaoXvazia() == 2 && this.nodoAtual.getPosicaoYvazia() == 2) {
-														this.nodoFilho1 = this.moveCima(this.nodoAtual);
-														this.nodoFilho2 = this.moveEsquerda(this.nodoAtual);
-														this.nodosFronteiras.add(this.nodoFilho1);
-														this.nodosFronteiras.add(this.nodoFilho2);
-
-													}
-												}
-											}
-
-										}
-									}
-								}
-							}
-
-						}
-					}
+					/*
+					 * if (this.nodoAtual.getPosicaoXvazia() == 0 && this.nodoAtual.getPosicaoYvazia() == 0) {
+					 * this.nodoFilho1 = this.moveBaixo(this.nodoAtual);
+					 * this.nodosFronteiras.add(this.nodoFilho1);
+					 * this.nodoFilho2 = this.moveDireita(this.nodoAtual);
+					 * this.nodosFronteiras.add(this.nodoFilho2);
+					 * } else {
+					 * // 0 NA POSICAO 01
+					 * if (this.nodoAtual.getPosicaoXvazia() == 0 && this.nodoAtual.getPosicaoYvazia() == 1) {
+					 * this.nodoFilho1 = this.moveEsquerda(this.nodoAtual);
+					 * this.nodoFilho2 = this.moveDireita(this.nodoAtual);
+					 * this.nodoFilho3 = this.moveBaixo(this.nodoAtual);
+					 * this.nodosFronteiras.add(this.nodoFilho1);
+					 * this.nodosFronteiras.add(this.nodoFilho2);
+					 * this.nodosFronteiras.add(this.nodoFilho3);
+					 * } else {
+					 * // 0 NA POSICAO 02
+					 * if (this.nodoAtual.getPosicaoXvazia() == 0 && this.nodoAtual.getPosicaoYvazia() == 2) {
+					 * this.nodoFilho1 = this.moveBaixo(this.nodoAtual);
+					 * this.nodoFilho2 = this.moveEsquerda(this.nodoAtual);
+					 * this.nodosFronteiras.add(this.nodoFilho1);
+					 * this.nodosFronteiras.add(this.nodoFilho2);
+					 *
+					 * } else {
+					 * // 0 NA POSICAO 10
+					 * if (this.nodoAtual.getPosicaoXvazia() == 1 && this.nodoAtual.getPosicaoYvazia() == 0) {
+					 * this.nodoFilho1 = this.moveBaixo(this.nodoAtual);
+					 * this.nodoFilho2 = this.moveDireita(this.nodoAtual);
+					 * this.nodoFilho3 = this.moveCima(this.nodoAtual);
+					 * this.nodosFronteiras.add(this.nodoFilho1);
+					 * this.nodosFronteiras.add(this.nodoFilho2);
+					 * this.nodosFronteiras.add(this.nodoFilho3);
+					 * } else {
+					 * // 0 NA POSICAO 11
+					 * if (this.nodoAtual.getPosicaoXvazia() == 1 && this.nodoAtual.getPosicaoYvazia() == 1) {
+					 * this.nodoFilho1 = this.moveBaixo(this.nodoAtual);
+					 * this.nodoFilho2 = this.moveDireita(this.nodoAtual);
+					 * this.nodoFilho3 = this.moveEsquerda(this.nodoAtual);
+					 * this.nodoFilho4 = this.moveCima(this.nodoAtual);
+					 * this.nodosFronteiras.add(this.nodoFilho1);
+					 * this.nodosFronteiras.add(this.nodoFilho2);
+					 * this.nodosFronteiras.add(this.nodoFilho3);
+					 * this.nodosFronteiras.add(this.nodoFilho4);
+					 * } else {
+					 * // 0 NA POSICAO 12
+					 * if (this.nodoAtual.getPosicaoXvazia() == 1 && this.nodoAtual.getPosicaoYvazia() == 2) {
+					 *
+					 * this.nodoFilho1 = this.moveBaixo(this.nodoAtual);
+					 * this.nodosFronteiras.add(this.nodoFilho1);
+					 * this.nodoFilho2 = this.moveEsquerda(this.nodoAtual);
+					 * this.nodosFronteiras.add(this.nodoFilho2);
+					 * this.nodoFilho3 = this.moveCima(this.nodoAtual);
+					 * this.nodosFronteiras.add(this.nodoFilho3);
+					 * } else {
+					 * // 0 NA POSICAO 20
+					 * if (this.nodoAtual.getPosicaoXvazia() == 2 && this.nodoAtual.getPosicaoYvazia() == 0) {
+					 * this.nodoFilho1 = this.moveCima(this.nodoAtual);
+					 * this.nodoFilho2 = this.moveDireita(this.nodoAtual);
+					 * this.nodosFronteiras.add(this.nodoFilho1);
+					 * this.nodosFronteiras.add(this.nodoFilho2);
+					 *
+					 * } else {
+					 *
+					 * // 0 NA POSICAO 21
+					 * if (this.nodoAtual.getPosicaoXvazia() == 2 && this.nodoAtual.getPosicaoYvazia() == 1) {
+					 * this.nodoFilho1 = this.moveDireita(this.nodoAtual);
+					 * this.nodoFilho2 = this.moveEsquerda(this.nodoAtual);
+					 * this.nodoFilho3 = this.moveCima(this.nodoAtual);
+					 * this.nodosFronteiras.add(this.nodoFilho1);
+					 * this.nodosFronteiras.add(this.nodoFilho2);
+					 * this.nodosFronteiras.add(this.nodoFilho3);
+					 *
+					 * } else {
+					 *
+					 * // 0 NA POSICAO 22
+					 * if (this.nodoAtual.getPosicaoXvazia() == 2 && this.nodoAtual.getPosicaoYvazia() == 2) {
+					 * this.nodoFilho1 = this.moveCima(this.nodoAtual);
+					 * this.nodoFilho2 = this.moveEsquerda(this.nodoAtual);
+					 * this.nodosFronteiras.add(this.nodoFilho1);
+					 * this.nodosFronteiras.add(this.nodoFilho2);
+					 *
+					 * }
+					 * }
+					 * }
+					 *
+					 * }
+					 * }
+					 * }
+					 * }
+					 *
+					 * }
+					 * }
+					 */
 
 					this.nodosJaVisitados.add(this.nodoAtual);
 					this.maiorFronteira();

@@ -4,8 +4,6 @@ import puzzle8SistemasInteligentes.Main;
 
 public class Nodo implements Comparable<Nodo> {
 
-	// Array bidimensional com as posicoes
-
 	private int[][] estado = new int[3][3];
 
 	private int custo;
