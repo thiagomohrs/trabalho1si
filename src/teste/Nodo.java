@@ -1,7 +1,5 @@
 package teste;
 
-import puzzle8SistemasInteligentes.Main;
-
 public class Nodo implements Comparable<Nodo> {
 
 	private int[][] estado = new int[3][3];
@@ -11,8 +9,7 @@ public class Nodo implements Comparable<Nodo> {
 	private int iddoPai;
 	private int posicaoXvazia;
 	private int posicaoYvazia;
-	private int heuristica;
-
+	
 	public Nodo(int custo, int[][] estado, int id, int iddoPai) {
 		this.custo = custo;
 		this.setEstado(estado);
@@ -67,16 +64,17 @@ public class Nodo implements Comparable<Nodo> {
 	}
 
 	public int getCustoMaisHeuristica() {
-		return this.getCusto() + this.calcularHeuristica();
+		return this.getCusto() + this.calcularHeuristica()+this.getQuantidadePosicoesInvertidas();
 	}
 
 	public int calcularHeuristica() {
+		
 		int[][] matriz = this.getEstado();
 
 		int distanciaHeuristica = 0;
 		for (int linhaObjetivo = 0; linhaObjetivo < 3; linhaObjetivo++) {
 			for (int colunaObjetivo = 0; colunaObjetivo < 3; colunaObjetivo++) {
-				int valorObjetivo = Main.matrizObjetivo[linhaObjetivo][colunaObjetivo];
+				int valorObjetivo = Jogo.matrizObjetivo[linhaObjetivo][colunaObjetivo];
 				for (int linhaMatriz = 0; linhaMatriz < 3; linhaMatriz++) {
 					for (int colunaMatriz = 0; colunaMatriz < 3; colunaMatriz++) {
 						int valorMatriz = matriz[linhaMatriz][colunaMatriz];
@@ -92,6 +90,109 @@ public class Nodo implements Comparable<Nodo> {
 			}
 		}
 		return distanciaHeuristica;
+	}
+	
+	public int getQuantidadePosicoesInvertidas(){
+		
+		int[][] matriz = this.getEstado();
+		
+		int quantDuplas = 0;
+		int posAtual [] = new int[2];
+		int [] posObjetivo = new int[2];
+		
+		for(int valor = 1; valor < 9; valor++){
+			if(valorEstaEmPosicaoInversaoDireta(valor,matriz)){
+				
+				posAtual = this.getPosicaoDoValor(valor, matriz); 
+				posObjetivo = this.getPosicaoFinalDoValor(valor);
+				
+				int lOrigN = posAtual[0];
+				int cOrigN = posAtual[1];
+				int nDest = Jogo.matrizObjetivo[lOrigN][cOrigN];
+				int lDestN = posObjetivo[0];
+				int cDestN = posObjetivo[1];
+				int nOrigN = matriz[lDestN][cDestN];
+				
+				if(nDest == nOrigN)
+					quantDuplas++;
+			}
+		}
+		return quantDuplas;	
+	}
+	
+	//Retorna true se o valor esta em posicao de inversao direta
+	public boolean valorEstaEmPosicaoInversaoDireta(int valor, int[][]matriz){
+		
+		int [] coordenadas = new int [2];
+		coordenadas = getPosicaoDoValor(valor, matriz);
+		int l = coordenadas[0];
+		int c = coordenadas[1];
+		
+		if(valor==1){
+			if((l==0 && c==1) || (l==1 && c==0))
+				return true;
+		}
+		if(valor==2){
+			if((l==0 && c==0) || (l==0 && c==2)|| (l==1 && c==1))
+				return true;
+		}
+		if(valor==3){
+			if((l==0 && c==1) || (l==1 && c==2))
+				return true;
+		}
+		if(valor==4){
+			if((l==0 && c==0) || (l==2 && c==0)|| (l==1 && c==1))
+				return true;
+		}
+		if(valor==5){
+			if((l==0 && c==1) || (l==1 && c==0)|| (l==2 && c==1) || (l==1 && c==2))
+				return true;
+		}
+		if(valor==6){
+			if((l==0 && c==2) || (l==1 && c==1))
+				return true;
+		}
+		if(valor==7){
+			if((l==1 && c==0) || (l==2 && c==1))
+				return true;
+		}
+		if(valor==8){
+			if((l==1 && c==1) || (l==2 && c==0))
+				return true;
+		}
+	return false;
+		
+	}
+	//Retorna o par [x,y] da posição final do valor recebido por parâmetro
+	public int [] getPosicaoFinalDoValor(int valor){
+		int [] posicao = new int [2];
+		int [][] objetivo = new int[3][3];
+		objetivo = Jogo.matrizObjetivo;
+		for(int l = 0; l < objetivo.length; l++){
+			for(int c = 0; c < objetivo.length; c++){
+				if(objetivo[l][c] == valor){
+					posicao[0] = l;
+					posicao[1] = c;
+				}
+			}
+		
+		}
+		return posicao;
+		
+	}
+	//Retorna o par [x,y] da posição do valor recebido por parâmetro
+	public int[] getPosicaoDoValor(int valor, int [][] tabuleiro){
+		int [] posicao = new int [2];
+		for(int l = 0; l < tabuleiro.length; l++){
+			for(int c = 0; c < tabuleiro.length; c++){
+				if(tabuleiro[l][c] == valor){
+					posicao[0] = l;
+					posicao[1] = c;
+				}
+			}
+		
+		}
+		return posicao;
 	}
 
 	@Override
