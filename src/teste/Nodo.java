@@ -28,7 +28,7 @@ public class Nodo implements Comparable<Nodo> {
 			}
 		}
 		this.calcularPosicaoVazia();
-		this.calcularHeuristica();
+		this.calcularDistanciaPosicoes();
 	}
 
 	public void calcularPosicaoVazia() {
@@ -64,11 +64,10 @@ public class Nodo implements Comparable<Nodo> {
 	}
 
 	public int getCustoMaisHeuristica() {
-		return this.getCusto() + this.calcularHeuristica()+this.getQuantidadePosicoesInvertidas();
+		return this.getCusto() + this.calcularDistanciaPosicoes() + this.getQuantidadePosicoesInvertidas();
 	}
 
-	public int calcularHeuristica() {
-		
+	public int calcularDistanciaPosicoes() {	
 		int[][] matriz = this.getEstado();
 
 		int distanciaHeuristica = 0;
@@ -96,82 +95,80 @@ public class Nodo implements Comparable<Nodo> {
 		
 		int[][] matriz = this.getEstado();
 		
-		int quantDuplas = 0;
-		int posAtual [] = new int[2];
-		int [] posObjetivo = new int[2];
+		int quantidadeDeDuplas = 0;
+		int [] posicaoAtual  = new int[2];
+		int [] posicaoObjetivo = new int[2];
 		
 		for(int valor = 1; valor < 9; valor++){
-			if(valorEstaEmPosicaoInversaoDireta(valor,matriz)){
+			if(verificaSeValorEstaEmPosicaoProximaAPosicaoObjetivo(valor)){
 				
-				posAtual = this.getPosicaoDoValor(valor, matriz); 
-				posObjetivo = this.getPosicaoFinalDoValor(valor);
+				posicaoAtual = this.getPosicaoDoValor(valor); 
+				posicaoObjetivo = this.getPosicaoFinalDoValor(valor);
 				
-				int lOrigN = posAtual[0];
-				int cOrigN = posAtual[1];
-				int nDest = Puzzle.matrizObjetivo[lOrigN][cOrigN];
-				int lDestN = posObjetivo[0];
-				int cDestN = posObjetivo[1];
-				int nOrigN = matriz[lDestN][cDestN];
+				int linaOrigem = posicaoAtual[0];
+				int colunaOrigem = posicaoAtual[1];
+				int numeroDestino = Puzzle.matrizObjetivo[linaOrigem][colunaOrigem];
+				int linhaDestino = posicaoObjetivo[0];
+				int colunaDestino = posicaoObjetivo[1];
+				int numeroOrigem = matriz[linhaDestino][colunaDestino];
 				
-				if(nDest == nOrigN)
-					quantDuplas++;
+				if(numeroDestino == numeroOrigem)
+					quantidadeDeDuplas++;
 			}
 		}
-		return quantDuplas;	
+		return quantidadeDeDuplas;	
 	}
 	
-	//Retorna true se o valor esta em posicao de inversao direta
-	public boolean valorEstaEmPosicaoInversaoDireta(int valor, int[][]matriz){
-		
+	public boolean verificaSeValorEstaEmPosicaoProximaAPosicaoObjetivo(int valor){
 		int [] coordenadas = new int [2];
-		coordenadas = getPosicaoDoValor(valor, matriz);
-		int l = coordenadas[0];
-		int c = coordenadas[1];
+		coordenadas = getPosicaoDoValor(valor);
+		int linha = coordenadas[0];
+		int coluna = coordenadas[1];
 		
 		if(valor==1){
-			if((l==0 && c==1) || (l==1 && c==0))
+			if((linha==0 && coluna==1) || (linha==1 && coluna==0))
 				return true;
 		}
 		if(valor==2){
-			if((l==0 && c==0) || (l==0 && c==2)|| (l==1 && c==1))
+			if((linha==0 && coluna==0) || (linha==0 && coluna==2)|| (linha==1 && coluna==1))
 				return true;
 		}
 		if(valor==3){
-			if((l==0 && c==1) || (l==1 && c==2))
+			if((linha==0 && coluna==1) || (linha==1 && coluna==2))
 				return true;
 		}
 		if(valor==4){
-			if((l==0 && c==0) || (l==2 && c==0)|| (l==1 && c==1))
+			if((linha==0 && coluna==0) || (linha==2 && coluna==0)|| (linha==1 && coluna==1))
 				return true;
 		}
 		if(valor==5){
-			if((l==0 && c==1) || (l==1 && c==0)|| (l==2 && c==1) || (l==1 && c==2))
+			if((linha==0 && coluna==1) || (linha==1 && coluna==0)|| (linha==2 && coluna==1) || (linha==1 && coluna==2))
 				return true;
 		}
 		if(valor==6){
-			if((l==0 && c==2) || (l==1 && c==1))
+			if((linha==0 && coluna==2) || (linha==1 && coluna==1))
 				return true;
 		}
 		if(valor==7){
-			if((l==1 && c==0) || (l==2 && c==1))
+			if((linha==1 && coluna==0) || (linha==2 && coluna==1))
 				return true;
 		}
 		if(valor==8){
-			if((l==1 && c==1) || (l==2 && c==0))
+			if((linha==1 && coluna==1) || (linha==2 && coluna==0))
 				return true;
 		}
 	return false;
 		
 	}
-	//Retorna o par [x,y] da posição final do valor recebido por parâmetro
+
 	public int [] getPosicaoFinalDoValor(int valor){
 		int [] posicao = new int [2];
 		int [][] objetivo = new int[3][3];
 		objetivo = Puzzle.matrizObjetivo;
-		for(int l = 0; l < objetivo.length; l++){
+		for(int linha = 0; linha < objetivo.length; linha++){
 			for(int c = 0; c < objetivo.length; c++){
-				if(objetivo[l][c] == valor){
-					posicao[0] = l;
+				if(objetivo[linha][c] == valor){
+					posicao[0] = linha;
 					posicao[1] = c;
 				}
 			}
@@ -180,14 +177,15 @@ public class Nodo implements Comparable<Nodo> {
 		return posicao;
 		
 	}
-	//Retorna o par [x,y] da posição do valor recebido por parâmetro
-	public int[] getPosicaoDoValor(int valor, int [][] tabuleiro){
+
+	public int[] getPosicaoDoValor(int valor){
 		int [] posicao = new int [2];
-		for(int l = 0; l < tabuleiro.length; l++){
-			for(int c = 0; c < tabuleiro.length; c++){
-				if(tabuleiro[l][c] == valor){
-					posicao[0] = l;
-					posicao[1] = c;
+		int[][] matriz = this.getEstado();
+		for(int linha = 0; linha < matriz.length; linha++){
+			for(int coluna = 0; coluna < matriz.length; coluna++){
+				if(matriz[linha][coluna] == valor){
+					posicao[0] = linha;
+					posicao[1] = coluna;
 				}
 			}
 		

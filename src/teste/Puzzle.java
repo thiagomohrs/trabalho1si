@@ -7,13 +7,13 @@ import java.util.List;
 class Puzzle {
 	
 	private int[][] matriz = { { 2, 1, 3 }, { 5, 0, 7 }, { 8, 4, 6 } }; // 18 passos teste professor
-	// private int[][] matriz = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 0, 8 } }; // 1 passo
-	
+//	 private int[][] matriz = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 0, 8 } }; // 1 passo
 	static int[][] matrizObjetivo = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 0 } };
 
 	private List<Nodo> nodosJaVisitados = new ArrayList<>();
 	private List<Nodo> nodosFronteiras = new ArrayList<>();
 	private List<Nodo> nodosCaminhoFinal = new ArrayList<>();
+	private List<Integer> numerosMovidos = new ArrayList<>();
 	private Nodo nodoAtual, nodoFilho1, nodoFilho2, nodoFilho3, nodoFilho4;
 	private int contadorID = 0;
 	private int maiorFronteira = 0;
@@ -81,9 +81,10 @@ class Puzzle {
 		for (int i = this.nodosCaminhoFinal.size(); i > 0; i--) {
 			this.matriz = this.nodosCaminhoFinal.get(i - 1).getEstado();
 		}
-		System.out.println("Caminho final: " + (this.nodosCaminhoFinal.size()-1) + " passos.");
+		System.out.println("Quantidade de nodos percorridos: " + (this.nodosCaminhoFinal.size()));
 		System.out.println("Id do Ultimo nodo: " + this.nodosCaminhoFinal.get(0).getID());
 		System.out.println("Maior Fronteira: " + this.maiorFronteira + " nodos.");
+		System.out.println("Numeros movidos: " + numerosMovidos);
 	}
 
 	public boolean ehEstadoFinal(int[][] matrizA) {
@@ -121,6 +122,7 @@ class Puzzle {
 		int y = atual.getPosicaoYvazia();
 
 		int tmp = estadoTemp[x][y];
+
 		estadoTemp[x][y] = estadoTemp[x + 1][y];
 		estadoTemp[x + 1][y] = tmp;
 
@@ -140,6 +142,7 @@ class Puzzle {
 		int y = atual.getPosicaoYvazia();
 
 		int tmp = estadoTemp[x][y];
+		
 		estadoTemp[x][y] = estadoTemp[x][y + 1];
 		estadoTemp[x][y + 1] = tmp;
 
@@ -159,6 +162,7 @@ class Puzzle {
 		int y = atual.getPosicaoYvazia();
 
 		int tmp = estadoTemp[x][y];
+
 		estadoTemp[x][y] = estadoTemp[x - 1][y];
 		estadoTemp[x - 1][y] = tmp;
 
@@ -177,6 +181,7 @@ class Puzzle {
 		int y = atual.getPosicaoYvazia();
 
 		int tmp = estadoTemp[x][y];
+		
 		estadoTemp[x][y] = estadoTemp[x][y - 1];
 		estadoTemp[x][y - 1] = tmp;
 
