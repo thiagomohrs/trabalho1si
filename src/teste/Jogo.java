@@ -43,18 +43,22 @@ class Jogo {
 					// FAZ AS TROCAS E CRIA OS NODOS FILHOS
 					// 0 NA POSICAO 00
 					if (this.nodoAtual.getPosicaoXvazia() > 0) {
+						// this.nodoFilho1 = this.mover(this.nodoAtual, 0);
 						this.nodoFilho1 = this.moveCima(this.nodoAtual);
 						this.nodosFronteiras.add(this.nodoFilho1);
 					}
 					if (this.nodoAtual.getPosicaoXvazia() < 2) {
+						// this.nodoFilho1 = this.mover(this.nodoAtual, 1);
 						this.nodoFilho2 = this.moveBaixo(this.nodoAtual);
 						this.nodosFronteiras.add(this.nodoFilho2);
 					}
 					if (this.nodoAtual.getPosicaoYvazia() > 0) {
+						// this.nodoFilho1 = this.mover(this.nodoAtual, 2);
 						this.nodoFilho3 = this.moveEsquerda(this.nodoAtual);
 						this.nodosFronteiras.add(this.nodoFilho3);
 					}
 					if (this.nodoAtual.getPosicaoYvazia() < 2) {
+						// this.nodoFilho1 = this.mover(this.nodoAtual, 3);
 						this.nodoFilho4 = this.moveDireita(this.nodoAtual);
 						this.nodosFronteiras.add(this.nodoFilho4);
 					}
@@ -206,6 +210,42 @@ class Jogo {
 		}
 		return true;
 
+	}
+
+	private Nodo mover(Nodo atual, int direcao) {
+		int[][] estadoTemp = new int[3][3];
+		int i, j;
+		for (i = 0; i < 3; i++) {
+			for (j = 0; j < 3; j++) {
+				estadoTemp[i][j] = atual.getEstado()[i][j];
+			}
+		}
+		int x = atual.getPosicaoXvazia();
+		int y = atual.getPosicaoYvazia();
+
+		int tmp = estadoTemp[x][y];
+		switch (direcao) {
+		case 0:
+			estadoTemp[x][y] = estadoTemp[x + 1][y];
+			estadoTemp[x - 1][y] = tmp;
+			break;
+		case 1:
+			estadoTemp[x][y] = estadoTemp[x + 1][y];
+			estadoTemp[x + 1][y] = tmp;
+			break;
+		case 2:
+			estadoTemp[x][y] = estadoTemp[x + 1][y];
+			estadoTemp[x][y - 1] = tmp;
+			break;
+		case 3:
+			estadoTemp[x][y] = estadoTemp[x + 1][y];
+			estadoTemp[x][y + 1] = tmp;
+			break;
+		default:
+			break;
+		}
+
+		return new Nodo(atual.getCusto() + 1, estadoTemp, ++this.contadorID, atual.getID());
 	}
 
 	private Nodo moveBaixo(Nodo atual) {
