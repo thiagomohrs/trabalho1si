@@ -74,7 +74,7 @@ public class Nodo implements Comparable<Nodo> {
 		int distanciaHeuristica = 0;
 		for (int linhaObjetivo = 0; linhaObjetivo < 3; linhaObjetivo++) {
 			for (int colunaObjetivo = 0; colunaObjetivo < 3; colunaObjetivo++) {
-				int valorObjetivo = Jogo.matrizObjetivo[linhaObjetivo][colunaObjetivo];
+				int valorObjetivo = Puzzle.matrizObjetivo[linhaObjetivo][colunaObjetivo];
 				for (int linhaMatriz = 0; linhaMatriz < 3; linhaMatriz++) {
 					for (int colunaMatriz = 0; colunaMatriz < 3; colunaMatriz++) {
 						int valorMatriz = matriz[linhaMatriz][colunaMatriz];
@@ -108,7 +108,7 @@ public class Nodo implements Comparable<Nodo> {
 				
 				int lOrigN = posAtual[0];
 				int cOrigN = posAtual[1];
-				int nDest = Jogo.matrizObjetivo[lOrigN][cOrigN];
+				int nDest = Puzzle.matrizObjetivo[lOrigN][cOrigN];
 				int lDestN = posObjetivo[0];
 				int cDestN = posObjetivo[1];
 				int nOrigN = matriz[lDestN][cDestN];
@@ -167,7 +167,7 @@ public class Nodo implements Comparable<Nodo> {
 	public int [] getPosicaoFinalDoValor(int valor){
 		int [] posicao = new int [2];
 		int [][] objetivo = new int[3][3];
-		objetivo = Jogo.matrizObjetivo;
+		objetivo = Puzzle.matrizObjetivo;
 		for(int l = 0; l < objetivo.length; l++){
 			for(int c = 0; c < objetivo.length; c++){
 				if(objetivo[l][c] == valor){

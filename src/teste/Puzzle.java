@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-class Jogo {
+class Puzzle {
 	
 	private int[][] matriz = { { 2, 1, 3 }, { 5, 0, 7 }, { 8, 4, 6 } }; // 18 passos teste professor
 	// private int[][] matriz = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 0, 8 } }; // 1 passo
@@ -18,24 +18,24 @@ class Jogo {
 	private int contadorID = 0;
 	private int maiorFronteira = 0;
 
-	Jogo() {
+	Puzzle() {
 		this.nodosJaVisitados.clear();
 		this.nodosFronteiras.clear();
 		this.nodoAtual = new Nodo(0, this.matriz, this.contadorID, -1);
 	}
 
-	void resolver8puzzle() {
+	void resolverJogo() {
 		this.nodosFronteiras.add(this.nodoAtual);
 		while (!this.nodosFronteiras.isEmpty()) {
 			this.ordenarFronteira();
 			this.nodoAtual = this.nodosFronteiras.get(0);
 			this.nodoAtual.imprimirNodo();
-			if (this.checarJaVisitados(this.nodoAtual)) {
+			if (this.verificaSeJaFoiVisitado(this.nodoAtual)) {
 				this.nodosFronteiras.remove(0);
 			} else {
 
 				if (this.ehEstadoFinal(this.nodoAtual.getEstado())) {
-					this.fimDeJogo();
+					this.finalDeJogo();
 					break;
 				} else {
 					this.nodoAtual.calcularPosicaoVazia();
@@ -64,7 +64,7 @@ class Jogo {
 		}
 	}
 
-	private void fimDeJogo() {
+	private void finalDeJogo() {
 		while (this.nodoAtual.getID() != 0) {
 			int idPai = this.nodoAtual.getIddoPai();
 
@@ -89,7 +89,7 @@ class Jogo {
 	public boolean ehEstadoFinal(int[][] matrizA) {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				if (matrizA[i][j] != Jogo.matrizObjetivo[i][j]) {
+				if (matrizA[i][j] != Puzzle.matrizObjetivo[i][j]) {
 					return false;
 				}
 			}
@@ -187,7 +187,7 @@ class Jogo {
 		Collections.sort(this.nodosFronteiras);
 	}
 
-	private boolean checarJaVisitados(Nodo nodoAtual) {
+	private boolean verificaSeJaFoiVisitado(Nodo nodoAtual) {
 		if (!this.nodosJaVisitados.isEmpty()) {
 			for (int i = 0; i < this.nodosJaVisitados.size(); i++) {
 				if (this.ehMesmoEstado(nodoAtual.getEstado(), this.nodosJaVisitados.get(i).getEstado())) {
