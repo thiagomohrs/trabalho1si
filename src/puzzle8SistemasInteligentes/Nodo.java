@@ -3,28 +3,27 @@ package puzzle8SistemasInteligentes;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Nodo implements Comparable<Nodo> {
-	 protected int[][] estadoPuzzle = new int[3][3];
-	 private int id;
-	 private int idDoNodoPai;
-	 private int custo;
-	 protected int posicaoXvazia;
-	 protected int posicaoYvazia;
-	 protected int posicaoXpeca;
-	 protected int posicaoYpeca;
-	 private int pecaMovida;
-	 List<Integer> distanciaDeCadaValor = new ArrayList<>();
+	protected int[][] estadoPuzzle = new int[3][3];
+	private int id;
+	private int idDoNodoPai;
+	private int custo;
+	protected int posicaoXvazia;
+	protected int posicaoYvazia;
+	protected int posicaoXpeca;
+	protected int posicaoYpeca;
+	private int pecaMovida;
+	List<Integer> distanciaDeCadaValor = new ArrayList<>();
 
-	 public Nodo(int id, int[][] estado, int idDoNodoPai, int custo) {
-	        setEstado(estado);
-	        this.id = id;
-	        this.idDoNodoPai = idDoNodoPai;
-	        this.custo = custo;
-	    }
-	 
+	public Nodo(int id, int[][] estado, int idDoNodoPai, int custo) {
+		this.setEstado(estado);
+		this.id = id;
+		this.idDoNodoPai = idDoNodoPai;
+		this.custo = custo;
+	}
+
 	public int getId() {
-		return id;
+		return this.id;
 	}
 
 	public void setId(int id) {
@@ -32,7 +31,7 @@ public class Nodo implements Comparable<Nodo> {
 	}
 
 	public List<Integer> getDistanciaDeCadaValor() {
-		return distanciaDeCadaValor;
+		return this.distanciaDeCadaValor;
 	}
 
 	public void setDistanciaDeCadaValor(List<Integer> distanciaDeCadaValor) {
@@ -48,28 +47,28 @@ public class Nodo implements Comparable<Nodo> {
 	}
 
 	public int[][] getEstado() {
-        return estadoPuzzle;
-    }
-	
-	public int getCusto(){
-		return custo;
+		return this.estadoPuzzle;
+	}
+
+	public int getCusto() {
+		return this.custo;
 	}
 
 	public void setEstado(int[][] estado) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                this.estadoPuzzle[i][j] = estado[i][j];
-            }
-        }
-        calcularPosicaoVazia();
-    }
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				this.estadoPuzzle[i][j] = estado[i][j];
+			}
+		}
+		this.calcularPosicaoVazia();
+	}
 
-    public int getIdDoNodoPai() {
-        return idDoNodoPai;
-    }
-    
-    public int getPosicaoXvazia() {
-		return posicaoXvazia;
+	public int getIdDoNodoPai() {
+		return this.idDoNodoPai;
+	}
+
+	public int getPosicaoXvazia() {
+		return this.posicaoXvazia;
 	}
 
 	public void setPosicaoXvazia(int posicaoXvazia) {
@@ -77,15 +76,15 @@ public class Nodo implements Comparable<Nodo> {
 	}
 
 	public int getPosicaoYvazia() {
-		return posicaoYvazia;
+		return this.posicaoYvazia;
 	}
 
 	public void setPosicaoYvazia(int posicaoYvazia) {
 		this.posicaoYvazia = posicaoYvazia;
 	}
-	
+
 	public int getPecaMovida() {
-		return pecaMovida;
+		return this.pecaMovida;
 	}
 
 	public void setPecaMovida(int pecaMovida) {
@@ -93,7 +92,7 @@ public class Nodo implements Comparable<Nodo> {
 	}
 
 	public int getPosicaoXpeca() {
-		return posicaoXpeca;
+		return this.posicaoXpeca;
 	}
 
 	public void setPosicaoXpeca(int posicaoXpeca) {
@@ -101,47 +100,47 @@ public class Nodo implements Comparable<Nodo> {
 	}
 
 	public int getPosicaoYpeca() {
-		return posicaoYpeca;
+		return this.posicaoYpeca;
 	}
 
 	public void setPosicaoYpeca(int posicaoYpeca) {
 		this.posicaoYpeca = posicaoYpeca;
 	}
-	
-	public int getCustoTotal(){
-		return getCusto() + calculaHeuristica(this.estadoPuzzle, Main.matrizObjetivo);
+
+	public int getCustoTotal() {
+		return this.getCusto() + this.calculaHeuristica(this.estadoPuzzle);
 	}
-	
+
 	public void calcularPosicaoVazia() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (estadoPuzzle[i][j] == 0) {
-                    posicaoXvazia = i;
-                    posicaoYvazia = j;
-                    break;
-                }
-            }
-        }
-    }
-	 
-	public void calcularPosicaoPeca(int peca) {
-	    for (int i = 0; i < 3; i++) {
-	        for (int j = 0; j < 3; j++) {
-	            if (estadoPuzzle[i][j] == peca) {
-	                posicaoXpeca = i;
-	                posicaoYpeca = j;
-	                break;
-	            }
-	        }
-	    }
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				if (this.estadoPuzzle[i][j] == 0) {
+					this.posicaoXvazia = i;
+					this.posicaoYvazia = j;
+					break;
+				}
+			}
+		}
 	}
-	 
-	public int calculaHeuristica(int[][] matriz, int[][] matrizObjetivo){
-		distanciaDeCadaValor.clear();
+
+	public void calcularPosicaoPeca(int peca) {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				if (this.estadoPuzzle[i][j] == peca) {
+					this.posicaoXpeca = i;
+					this.posicaoYpeca = j;
+					break;
+				}
+			}
+		}
+	}
+
+	public int calculaHeuristica(int[][] matriz) {
+		this.distanciaDeCadaValor.clear();
 		int distanciaHeuristica = 0;
 		for (int linhaObjetivo = 0; linhaObjetivo < 3; linhaObjetivo++) {
 			for (int colunaObjetivo = 0; colunaObjetivo < 3; colunaObjetivo++) {
-				int valorObjetivo = matrizObjetivo[linhaObjetivo][colunaObjetivo];
+				int valorObjetivo = Main.matrizObjetivo[linhaObjetivo][colunaObjetivo];
 				for (int linhaMatriz = 0; linhaMatriz < 3; linhaMatriz++) {
 					for (int colunaMatriz = 0; colunaMatriz < 3; colunaMatriz++) {
 						int valorMatriz = matriz[linhaMatriz][colunaMatriz];
@@ -150,51 +149,51 @@ public class Nodo implements Comparable<Nodo> {
 							int distanciaColulas = colunaObjetivo - colunaMatriz;
 							int distanciaLinhas = linhaObjetivo - linhaMatriz;
 							distanciaDoValor = Math.abs(distanciaColulas) + Math.abs(distanciaLinhas);
-							distanciaDeCadaValor.add(distanciaDoValor);
+							this.distanciaDeCadaValor.add(distanciaDoValor);
 							distanciaHeuristica += distanciaDoValor;
 						}
 					}
 				}
 			}
 		}
-    	return distanciaHeuristica;
-    }
-	
-	public void imprimirNodo(){
+		return distanciaHeuristica;
+	}
+
+	public void imprimirNodo() {
 		for (int linha = 0; linha < 3; linha++) {
 			for (int coluna = 0; coluna < 3; coluna++) {
-				System.out.printf("\t %d \t", estadoPuzzle[linha][coluna]);
+				System.out.printf("\t %d \t", this.estadoPuzzle[linha][coluna]);
 			}
 			System.out.println();
 		}
 		System.out.println("------------------------------------------");
 	}
-	
-	public int calculaQuantidadeDePecasForaDaPosicao(){
+
+	public int calculaQuantidadeDePecasForaDaPosicao() {
 		int numeroDePecasForaDaPosicao = 0;
-		for (int i = 0; i < distanciaDeCadaValor.size(); i++) {
-			if (distanciaDeCadaValor.get(i) > 0) {
+		for (int i = 0; i < this.distanciaDeCadaValor.size(); i++) {
+			if (this.distanciaDeCadaValor.get(i) > 0) {
 				numeroDePecasForaDaPosicao++;
 			}
 		}
 		return numeroDePecasForaDaPosicao;
 	}
-	
+
 	public int calculaPecasComObjetivosInvertidos(int[][] matriz, int[][] objetivo) {
 		int valorTotal = 0;
-		for (int i = 0; i < distanciaDeCadaValor.size(); i++) {
-			int pecaNaPosicaoObjetivo = verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, i);
+		for (int i = 0; i < this.distanciaDeCadaValor.size(); i++) {
+			int pecaNaPosicaoObjetivo = this.verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, i);
 			if (pecaNaPosicaoObjetivo != i) {
-				if (pecaNaPosicaoObjetivo == verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, pecaNaPosicaoObjetivo)) {
-					int valor = distanciaDeCadaValor.get(i);
-					distanciaDeCadaValor.set(i+1, valor + 1);
+				if (pecaNaPosicaoObjetivo == this.verificarPecaNaPosicaoObjetivoByPeca(matriz, objetivo, pecaNaPosicaoObjetivo)) {
+					int valor = this.distanciaDeCadaValor.get(i);
+					this.distanciaDeCadaValor.set(i + 1, valor + 1);
 					valorTotal += 1;
 				}
 			}
 		}
 		return valorTotal;
 	}
-	
+
 	public int verificarPecaNaPosicaoObjetivoByPeca(int[][] matriz, int[][] objetivo, int peca) {
 		int valor = 0;
 		for (int linhaobjetivo = 0; linhaobjetivo < 3; linhaobjetivo++) {
@@ -207,15 +206,15 @@ public class Nodo implements Comparable<Nodo> {
 		}
 		return valor;
 	}
-	
+
 	@Override
 	public int compareTo(Nodo outroNodo) {
-	if (this.getCustoTotal() < outroNodo.getCustoTotal()) {
-		return -1;
-    }
-	    if (this.getCustoTotal() > outroNodo.getCustoTotal()) {
-	        return +1;
-	    }
-	    return 0;
+		if (this.getCustoTotal() < outroNodo.getCustoTotal()) {
+			return -1;
+		}
+		if (this.getCustoTotal() > outroNodo.getCustoTotal()) {
+			return +1;
+		}
+		return 0;
 	}
 }
