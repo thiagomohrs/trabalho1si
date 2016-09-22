@@ -3,17 +3,19 @@ package trabalho1si;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 class Puzzle {
-	
-	private int[][] matriz = { { 2, 1, 3 }, { 5, 0, 7 }, { 8, 4, 6 } }; // 18 passos teste professor
-//	private int[][] matriz = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 0, 8 } }; // 1 passo
-//	private int[][] matriz = { { 3, 2, 1 }, { 6, 5, 4 }, { 7, 0, 8 } };
-//	private int[][] matriz = { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 } };
-//	private int[][] matriz = { { 1, 0, 3 }, { 7, 4, 6 }, { 5, 8, 2 } };
-//	private int[][] matriz = { { 7, 1, 3 }, { 0, 4, 6 }, { 5, 8, 2 } };
+
+	// private int[][] matriz = { { 2, 1, 3 }, { 5, 0, 7 }, { 8, 4, 6 } }; // 18 passos teste professor
+	// private int[][] matriz = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 0, 8 } }; // 1 passo
+	// private int[][] matriz = { { 3, 2, 1 }, { 6, 5, 4 }, { 7, 0, 8 } };
+	// private int[][] matriz = { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 } };
+	// private int[][] matriz = { { 1, 0, 3 }, { 7, 4, 6 }, { 5, 8, 2 } };
+	// private int[][] matriz = { { 7, 1, 3 }, { 0, 4, 6 }, { 5, 8, 2 } };
+	private int[][] matriz = { { 4, 7, 5 }, { 0, 2, 1 }, { 3, 6, 8 } };
 	static int[][] matrizObjetivo = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 0 } };
-//	private int[][] matriz = criarMatrizAleatoria(new int[3][3]);
+	// private int[][] matriz = criarMatrizAleatoria(new int[3][3]);
 
 	private List<Nodo> nodosJaVisitados = new ArrayList<>();
 	private List<Nodo> nodosFronteiras = new ArrayList<>();
@@ -22,6 +24,7 @@ class Puzzle {
 	private Nodo nodoAtual, nodoFilho1, nodoFilho2, nodoFilho3, nodoFilho4;
 	private int contadorID = 0;
 	private int maiorFronteira = 0;
+	private long start;
 
 	Puzzle() {
 		this.nodosJaVisitados.clear();
@@ -44,13 +47,14 @@ class Puzzle {
 		}
 		return matriz;
 	}
-	
+
 	void resolverJogo() {
+		this.start = System.currentTimeMillis();
 		this.nodosFronteiras.add(this.nodoAtual);
 		while (!this.nodosFronteiras.isEmpty()) {
 			this.ordenarFronteira();
 			this.nodoAtual = this.nodosFronteiras.get(0);
-			this.nodoAtual.imprimirNodo();
+			// this.nodoAtual.imprimirNodo();
 			if (this.verificaSeJaFoiVisitado(this.nodoAtual)) {
 				this.nodosFronteiras.remove(0);
 			} else {
@@ -85,6 +89,7 @@ class Puzzle {
 	}
 
 	private void finalDeJogo() {
+		long finish = System.currentTimeMillis();
 		while (this.nodoAtual.getId() != 0) {
 			int idPai = this.nodoAtual.getIddoPai();
 
@@ -102,9 +107,11 @@ class Puzzle {
 			this.matriz = this.nodosCaminhoFinal.get(i - 1).getEstado();
 			this.numerosMovidos.add(this.nodosCaminhoFinal.get(i - 1).getNumeroMovido());
 		}
-		System.out.println("Quantidade de nodos percorridos: " + (this.nodosCaminhoFinal.size()));
+		System.out.println("Quantidade de nodos percorridos: " + this.nodosCaminhoFinal.size());
 		System.out.println("Maior Fronteira: " + this.maiorFronteira + " nodos.");
-		System.out.println("Numeros movidos: " + numerosMovidos);
+		System.out.println("Números movidos: " + this.numerosMovidos);
+		long total = finish - this.start;
+		System.out.println("Tempo total execução: " + TimeUnit.MILLISECONDS.toSeconds(total) + " segundos");
 	}
 
 	public boolean ehEstadoFinal(int[][] matrizA) {
@@ -163,7 +170,7 @@ class Puzzle {
 		int y = atual.getPosicaoYvazia();
 
 		int tmp = estado[x][y];
-		
+
 		estado[x][y] = estado[x][y + 1];
 		int numeroMovido = estado[x][y + 1];
 		estado[x][y + 1] = tmp;
@@ -204,7 +211,7 @@ class Puzzle {
 		int y = atual.getPosicaoYvazia();
 
 		int tmp = estado[x][y];
-		
+
 		estado[x][y] = estado[x][y - 1];
 		int numeroMovido = estado[x][y - 1];
 		estado[x][y - 1] = tmp;
