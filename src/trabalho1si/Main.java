@@ -1,4 +1,4 @@
-package teste;
+package trabalho1si;
 
 public class Main {
 

@@ -1,4 +1,4 @@
-package puzzle8SistemasInteligentes;
+package trabalho1si;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -31,19 +31,5 @@ public class Window extends JFrame{
 			}
 		}
 		this.add(panel, BorderLayout.CENTER);
-	}
-	public void repaintMatriz(int[][] matriz) {
-		for(int i = 0; i < 3; i++){
-			for(int j = 0; j < 3; j++){
-				if(matriz[i][j] == 0){
-					matrizJButton[i][j].setText("");
-					matrizJButton[i][j].repaint();
-				}else {
-					matrizJButton[i][j].setText(String.valueOf(matriz[i][j]));
-					matrizJButton[i][j].repaint();
-				}
-			}
-		}
-		this.repaint();
 	}
 }
